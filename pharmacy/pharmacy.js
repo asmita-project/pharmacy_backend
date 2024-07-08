@@ -65,13 +65,13 @@ const upload = multer({storage
     // }
 })
 
-router.post('/',upload.single('pharmacy'),validateRequest,(req, res) => {
+router.post('/',validateRequest,(req, res) => {
     const { name,email,owner,address,phone,role,password } = req.body
-    const file = req.file;
-    if (!file) {
-        return res.status(400).send('No file uploaded.');
-      }
-    db.query('INSERT INTO pharmacy(name,email,phone,role,owner,address,photo)VALUES(?,?,?,?,?,?,?)',[name, email, phone, role,owner,address,file.filename], function (err, result) {
+    // const file = req.file;
+    // if (!file) {
+    //     return res.status(400).send('No file uploaded.');
+    //   }
+    db.query('INSERT INTO pharmacy(name,email,phone,role,owner,address)VALUES(?,?,?,?,?,?)',[name, email, phone, role,owner,address], function (err, result) {
         if (err) {
             console.error(err)
             res.status(400).json({ message: 'Server Problem' })
@@ -100,7 +100,8 @@ const loginfun = async (username, password, role, id) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     db.query('INSERT INTO login(username,password,role,register)VALUES(?,?,?,?)', [username, hashedPassword, role, id], function (err, result) {
         if (err) {
-            console.log('error login')
+            // res.status(400).json({ message: 'Server Problem',error:err})
+            console.log('error login',err)
         }
         else {
             console.log('status ok')
@@ -109,7 +110,7 @@ const loginfun = async (username, password, role, id) => {
 }
 
 
-router.get('/',tokenverify,function(req,res){
+router.get('/all',function(req,res){
     db.query('select * from pharmacy',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
@@ -131,7 +132,7 @@ router.get('/:id',function(req,res){
     })
 })
 
-router.get('/delete/:id',function(req,res){
+router.delete('/delete/:id',function(req,res){
     const {id}=req.body
     db.query('delete from pharmacy where id=?',[id],function(err,result){
         if (err) {
