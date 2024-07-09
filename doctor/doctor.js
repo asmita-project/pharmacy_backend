@@ -61,13 +61,13 @@ const upload = multer({storage
     // }
 })
 
-router.post('/',upload.single('doctor'),validateRequest,(req, res) => {
+router.post('/',validateRequest,(req, res) => {
     const { name,email,hospital,address,phone,role,password } = req.body
-    const file = req.file;
-    if (!file) {
-        return res.status(400).send('No file uploaded.');
-      }
-    db.query('INSERT INTO doctor(name,email,phone,role,hospital,address,photo)VALUES(?,?,?,?,?,?,?)',[name, email, phone, role,hospital,address,file.filename], function (err, result) {
+    // const file = req.file;
+    // if (!file) {
+    //     return res.status(400).send('No file uploaded.');
+    //   }
+    db.query('INSERT INTO doctor(name,email,phone,role,hospital,address)VALUES(?,?,?,?,?,?)',[name, email, phone, role,hospital,address], function (err, result) {
         if (err) {
             console.error(err)
             res.status(400).json({ message: 'Server Problem' })
@@ -104,8 +104,8 @@ const loginfun = async (username, password, role, id) => {
     })
 }
 
-router.get('/',function(req,res){
-    db.query('select * from doctor',function(err,result){
+router.get('/all',function(req,res){
+    db.query('SELECT * FROM login JOIN doctor ON login.register = doctor.id',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -126,26 +126,45 @@ router.get('/:id',function(req,res){
     })
 })
 
-router.get('/delete/:id',function(req,res){
-    const {id}=req.body
+router.delete('/delete/:id',function(req,res){
+    const {id}=req.params
     db.query('delete from doctor where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json({message:id+''+'is Deleted'})
+            db.query('delete from login where register=?',[id],function (err2, result2) {
+                if (err2) {
+                    res.status(400).json({ message: 'server problem' });
+                    console.log(err2, "err2");
+                }
+                else {
+                    res.status(200).json({ message: id + ' ' + 'is Deleted'});
+                    console.log(result2, "result2");
+                }
+            })
+           
         }
     })
 })
 
-router.get('/update',function(req,res){
-    const {id,name,hodpital,address,phone}=req.body
-    db.query('update doctor set name=?,hospital=?,address=?,phone=? where id=?',[name,hodpital,address,phone,id],function(err,result){
+router.post('/update',function(req,res){
+    const {id,name,hospital,address,phone}=req.body
+    db.query('update doctor set name=?,hospital=?,address=?,phone=? where id=?',[name,hospital,address,phone,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json({message:id+''+'is Deleted'})
+            db.query('select * from doctor where id=?', [id], function (err, result2) {
+                if (err) {
+                    console.error(err)
+                    res.status(400).json({ message: 'User already exists' })
+                }
+                else {
+                    res.status(200).json(result2[0])
+                }
+            })
+           
         }
     })
 })

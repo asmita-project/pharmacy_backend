@@ -111,7 +111,7 @@ const loginfun = async (username, password, role, id) => {
 
 
 router.get('/all',function(req,res){
-    db.query('select * from pharmacy',function(err,result){
+    db.query('SELECT * FROM login JOIN pharmacy ON login.register = pharmacy.id',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -133,18 +133,28 @@ router.get('/:id',function(req,res){
 })
 
 router.delete('/delete/:id',function(req,res){
-    const {id}=req.body
+    const {id}=req.params
     db.query('delete from pharmacy where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json({message:id+''+'is Deleted'})
+            db.query('delete from login where register=?',[id],function (err2, result2) {
+                if (err2) {
+                    res.status(400).json({ message: 'server problem' });
+                    console.log(err2, "err2");
+                }
+                else {
+                    res.status(200).json({ message: id + ' ' + 'is Deleted'});
+                    console.log(result2, "result2");
+                }
+            })
+           
         }
     })
 })
 
-router.get('/update',function(req,res){
+router.post('/update',function(req,res){
     const {id,name,owner,address,phone}=req.body
     db.query('update pharmacy set name=?,owner=?,address=?,phone=? where id=?',[name,owner,address,phone,id],function(err,result){
         if (err) {
