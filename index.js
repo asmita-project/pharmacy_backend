@@ -27,8 +27,8 @@ app.use('/units',units)
 app.use('/doctor',doctor)
 app.use('/medicine',medicine)
 app.use('/profile', express.static('upload/images'));
-
-
+app.use('/images',express.static('upload/category'));
+app.use('/subcategoryimg',express.static('upload/subcategory'));
 app.listen(PORT,()=>{
    console.log('App Running on',PORT)
 })

@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const db = require('../../database/db')
 const multer = require("multer");
 const path = require("path");
+const fs = require('fs');
 const tokenverify = require('../../tokenverify/tokenverify')
 
 app.use(bodyParsor.json());
@@ -78,7 +79,7 @@ router.post('/',upload.single('category'),validateRequest,tokenverify,(req, res)
 })
 
 
-router.get('/',tokenverify,function(req,res){
+router.get('/',function(req,res){
     db.query('select * from category',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
@@ -88,7 +89,7 @@ router.get('/',tokenverify,function(req,res){
         }
     })
 })
-router.get('/:id',tokenverify,function(req,res){
+router.get('/:id',function(req,res){
     const {id}=req.body
     db.query('select * from category where id=?',[id],function(err,result){
         if (err) {
@@ -100,8 +101,8 @@ router.get('/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/delete/:id',function(req,res){
-    const {id}=req.body
+router.delete('/delete/:id',function(req,res){
+    const {id}=req.params
     db.query('delete from category where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
@@ -112,17 +113,45 @@ router.get('/delete/:id',function(req,res){
     })
 })
 
-router.get('/update',function(req,res){
+router.post('/update',function(req,res){
     const {id,name}=req.body
     db.query('update category set name=? where id=?',[name,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json({message:id+''+'is Deleted'})
+            db.query('select * from category where id=?', [id], function (err, result2) {
+                if (err) {
+                    console.error(err)
+                    res.status(400).json({ message: 'categoty not found' })
+                }
+                else {
+                    res.status(200).json(result[0])
+                }
+            })
         }
     })
 })
+
+router.post('/upload',upload.single('category'), (req, res) => {
+    const {id}=req.body
+    const file = req.file;
+
+    if (!file) {
+        res.status(400).json({ message: 'file not selected'})
+    }
+    db.query('update category set photo=? where id=?',[file.filename,id],function(er,result){
+        if (er) {
+            res.json({ message: 'server problem'})
+        }
+        else{
+            res.status(200).json({ message:'updated'})
+        }
+    })
+  
+    // Check if a record for the current file exists
+  
+  });
 module.exports = router
 // Check if user already exists
 
