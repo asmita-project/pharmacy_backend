@@ -90,48 +90,31 @@ router.get('/',function(req,res){
 })
 router.get('/categoryby/:id',function(req,res){
     const {id}=req.params
-    db.query('SELECT * FROM `subcategory` WHERE category=?',[id],function(err,result){
+    db.query('SELECT subcategory.id,subcategory.photo,subcategory.name,category.name AS category,subcategory.category AS cateid FROM subcategory JOIN category ON subcategory.category = category.id WHERE subcategory.category=?',[id],function(err,result){
         if (err) {
             res.status(400).send({ message: 'server problem'})
         }
         else{
-            for(let i of result){
-                db.query('select * from category where id=?',[i.category],function(err2,result2){
-                    if (err2) {
-                        res.status(400).send({ message: 'server problem'})
-                    }
-                    else{
-                        const isEmpty = (obj) => {
-                            return Object.keys(obj).length === 0;
-                          };
-                        if (isEmpty(result2)) {
-                            res.status(200).send({ message: 'empty'})
+            if (result.length>=0) {
+                const DataList =[]
+                for (let i of result) {
+                    let data = {
+                        id:i.id,
+                        name:i.name,
+                        photo:i.photo,
+                        category:{
+                            id:i.cateid,
+                            name:i.category
                         }
-                        else{
-                            const Datalist =[]
-                            for (let i of result) {
-                                let data ={
-                                    id:i.id,
-                                    name:i.name,
-                                    categoryid:i.category,
-                                    photo:i.photo,
-                                    category:{
-                                        id:result2[0].id,
-                                        name:result2[0].name,
-                                        photo:result2[0].photo
-                                    }
-    
-                                }
-                                Datalist.push(data)
-                            }
-                            
-                            res.status(200).send(Datalist)
-                           
-                        }
-                        
-                    }
-                })
+                    } 
+                    DataList.push(data)
+                }
+                res.status(200).send(DataList)
             }
+            else{
+                res.status(200).send(result)
+            }
+           
             
         }
     })

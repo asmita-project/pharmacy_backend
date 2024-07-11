@@ -78,17 +78,75 @@ router.post('/',upload.single('composition'),validateRequest,tokenverify,(req, r
 })
 
 
-router.get('/',tokenverify,function(req,res){
-    db.query('select * from composition',function(err,result){
+router.get('/',function(req,res){
+    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,composition.photo,company.id AS companyid,composition.name,composition.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json(result)
+            if (result.length>=0) {
+                const DataList=[]
+                for (let i of result) {
+                   let data = {
+                       id:i.id,
+                       name:i.name,
+                       photo:i.photo,
+                       category:{
+                           id:i.cateid,
+                           name:i.category
+                       },
+                       subcategory:{
+                           id:i.subcateid,
+                           name:i.subcateroryname
+                       },
+                       company:{
+                        id:i.companyid,
+                        name:i.companyname
+                    }            
+                }
+                DataList.push(data)
+               }
+               res.status(200).send(DataList)
+           
+           }
+           else{
+               res.status(200).send(result)
+           }
         }
     })
 })
-router.get('/:id',tokenverify,function(req,res){
+router.get('/companyby/:id',function(req,res){
+    const {id}=req.params
+    db.query('SELECT composition.name,composition.id,composition.photo,company.id AS company_id,company.name AS company_name from composition JOIN company ON composition.company = company.id WHERE composition.company = ?',[id],function(err,result){
+        if (err) {
+            res.status(400).send({ message: 'server problem'})
+        }
+        else{
+            if (result.length>=0) {
+                const DataList =[]
+                for (let i of result) {
+                    let data = {
+                        id:i.id,
+                        name:i.name,
+                        photo:i.photo,
+                        company:{
+                            id:i.company_id,
+                            name:i.company_name
+                        }
+                    } 
+                    DataList.push(data)
+                }
+                res.status(200).send(DataList)
+            }
+            else{
+                res.status(200).send(result)
+            }
+           
+            
+        }
+    })
+})
+router.get('/:id',function(req,res){
     const {id}=req.body
     db.query('select * from composition where id=?',[id],function(err,result){
         if (err) {
@@ -100,8 +158,8 @@ router.get('/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/delete/:id',tokenverify,function(req,res){
-    const {id}=req.body
+router.delete('/delete/:id',function(req,res){
+    const {id}=req.params
     db.query('delete from composition where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
@@ -112,7 +170,7 @@ router.get('/delete/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/update',tokenverify,function(req,res){
+router.post('/update',function(req,res){
     const {id,name,category,subcategory,company}=req.body
     db.query('update composition set name=?,category=?,subcategory=?,company=? where id=?',[name,category,subcategory,company,id],function(err,result){
         if (err) {
@@ -123,6 +181,25 @@ router.get('/update',tokenverify,function(req,res){
         }
     })
 })
+router.post('/upload',upload.single('subcategory'), (req, res) => {
+    const {id}=req.body
+    const file = req.file;
+
+    if (!file) {
+        res.status(400).json({ message: 'file not selected'})
+    }
+    db.query('update composition set photo=? where id=?',[file.filename,id],function(er,result){
+        if (er) {
+            res.json({ message: 'server problem'})
+        }
+        else{
+            res.status(200).json({ message:'updated'})
+        }
+    })
+  
+    // Check if a record for the current file exists
+  
+  });
 module.exports = router
 // Check if user already exists
 

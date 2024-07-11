@@ -25,7 +25,7 @@ const validateRequest = (req, res, next) => {
     const { name} = req.body;
 
     if (!isNonEmptyString(name)) {
-        return res.status(400).json({ error: 'unit is required must be a positive integer.' });
+        return res.status(400).json({ error: 'unit is required must be a string integer.' });
     }
 
     next();
@@ -62,17 +62,78 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
 })
 
 
-router.get('/',tokenverify,function(req,res){
-    db.query('select * from units',function(err,result){
+router.get('/',function(req,res){
+    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.id AS companyid,composition.name AS comp_name,composition.id AS comp_id,units.name,units.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id JOIN units ON units.composition = composition.id',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json(result)
+            if (result.length>=0) {
+                const DataList=[]
+                for (let i of result) {
+                   let data = {
+                       id:i.id,
+                       name:i.name,
+                       category:{
+                           id:i.cateid,
+                           name:i.category
+                       },
+                       subcategory:{
+                           id:i.subcateid,
+                           name:i.subcateroryname
+                       },
+                       company:{
+                        id:i.companyid,
+                        name:i.companyname
+                    },
+                    composition:{
+                        id:i.comp_id,
+                        name:i.comp_name
+                       
+                    }            
+                }
+                DataList.push(data)
+               }
+               res.status(200).send(DataList)
+           
+           }
+           else{
+               res.status(200).send(result)
+           }
         }
     })
 })
-router.get('/:id',tokenverify,function(req,res){
+router.get('/compositionby/:id',function(req,res){
+    const {id}=req.params
+    db.query('SELECT units.name,units.id,composition.id AS comp_id,composition.name AS comp_name from units JOIN composition ON composition.id = units.id WHERE units.composition = ?',[id],function(err,result){
+        if (err) {
+            res.status(400).send({ message: 'server problem'})
+        }
+        else{
+            if (result.length>=0) {
+                const DataList =[]
+                for (let i of result) {
+                    let data = {
+                        id:i.id,
+                        name:i.name,
+                        unit:{
+                            id:i.comp_id,
+                            name:i.comp_name
+                        }
+                    } 
+                    DataList.push(data)
+                }
+                res.status(200).send(DataList)
+            }
+            else{
+                res.status(200).send(result)
+            }
+           
+            
+        }
+    })
+})
+router.get('/:id',function(req,res){
     const {id}=req.body
     db.query('select * from units where id=?',[id],function(err,result){
         if (err) {
@@ -84,8 +145,8 @@ router.get('/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/delete/:id',tokenverify,function(req,res){
-    const {id}=req.body
+router.delete('/delete/:id',function(req,res){
+    const {id}=req.params
     db.query('delete from units where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
@@ -96,7 +157,7 @@ router.get('/delete/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/update',tokenverify,function(req,res){
+router.post('/update',function(req,res){
     const {id,name,category,subcategory,company,composition}=req.body
     db.query('update units set name=?,category=?,subcategory=?,company=?,composition=? where id=?',[name,category,subcategory,company,composition,id],function(err,result){
         if (err) {

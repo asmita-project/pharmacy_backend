@@ -77,18 +77,71 @@ router.post('/',upload.single('company'),validateRequest,tokenverify,(req, res) 
     })
 })
 
-
+router.get('/subcategoryyby/:id',function(req,res){
+    const {id}=req.params
+    db.query('SELECT company.id,company.photo,company.name,subcategory.name AS subcategory,company.subcategory AS subcateid FROM company JOIN  subcategory ON subcategory.id = company.id WHERE company.subcategory=?',[id],function(err,result){
+        if (err) {
+            res.status(400).send({ message: 'server problem'})
+        }
+        else{
+            if (result.length>=0) {
+                const DataList =[]
+                for (let i of result) {
+                    let data = {
+                        id:i.id,
+                        name:i.name,
+                        photo:i.photo,
+                        subcategory:{
+                            id:i.subcateid,
+                            name:i.subcategory
+                        }
+                    } 
+                    DataList.push(data)
+                }
+                res.status(200).send(DataList)
+            }
+            else{
+                res.status(200).send(result)
+            }
+           
+            
+        }
+    })
+})
 router.get('/',function(req,res){
-    db.query('select * from company',function(err,result){
+    db.query('SELECT subcategory.id AS subcateid,subcategory.name,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.photo,company.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json(result)
+            if (result.length>=0) {
+             const DataList=[]
+             for (let i of result) {
+                let data = {
+                    id:i.id,
+                    name:i.companyname,
+                    photo:i.photo,
+                    category:{
+                        id:i.cateid,
+                        name:i.category
+                    },
+                    subcategory:{
+                        id:i.subcateid,
+                        name:i.name
+                    }         
+             }
+             DataList.push(data)
+            }
+            res.status(200).send(DataList)
+        
         }
-    })
+        else{
+            res.status(200).send(result)
+        }
+    }
 })
-router.get('/:id',tokenverify,function(req,res){
+})
+router.get('/:id',function(req,res){
     const {id}=req.params
     db.query('select * from company where id=?',[id],function(err,result){
         if (err) {
@@ -100,7 +153,7 @@ router.get('/:id',tokenverify,function(req,res){
     })
 })
 
-router.get('/delete/:id',function(req,res){
+router.delete('/delete/:id',function(req,res){
     const {id}=req.params
     db.query('delete from company where id=?',[id],function(err,result){
         if (err) {
@@ -112,7 +165,7 @@ router.get('/delete/:id',function(req,res){
     })
 })
 
-router.get('/update',tokenverify,function(req,res){
+router.post('/update',tokenverify,function(req,res){
     const {id,name,category,subcategory}=req.body
     db.query('update company set name=?,category=?,subcategory=? where id=?',[name,category,subcategory,id],function(err,result){
         if (err) {
@@ -123,14 +176,14 @@ router.get('/update',tokenverify,function(req,res){
         }
     })
 })
-router.post('/upload',upload.single('subcategory'), (req, res) => {
+router.post('/upload',upload.single('company'), (req, res) => {
     const {id}=req.body
     const file = req.file;
 
     if (!file) {
         res.status(400).json({ message: 'file not selected'})
     }
-    db.query('update subcategory set photo=? where id=?',[file.filename,id],function(er,result){
+    db.query('update company set photo=? where id=?',[file.filename,id],function(er,result){
         if (er) {
             res.json({ message: 'server problem'})
         }
