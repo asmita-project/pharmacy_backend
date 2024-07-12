@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 11, 2024 at 03:02 PM
+-- Generation Time: Jul 12, 2024 at 03:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -136,6 +136,27 @@ INSERT INTO `doctor` (`id`, `name`, `hospital`, `address`, `phone`, `email`, `ro
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `doctor_description`
+--
+
+CREATE TABLE `doctor_description` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(500) NOT NULL,
+  `date` date NOT NULL,
+  `doctor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `doctor_description`
+--
+
+INSERT INTO `doctor_description` (`id`, `name`, `description`, `date`, `doctor`) VALUES
+(1, 'laxmi hanwatkar', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five cen', '2024-07-12', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login`
 --
 
@@ -183,7 +204,20 @@ CREATE TABLE `medicine` (
 --
 
 INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, `company`, `unit`, `price`, `Manufacturing`, `expiry`, `photo`) VALUES
-(1, 'nice', 1, 4, 2, 4, 1, '20', '2024-07-10', '2024-08-10', 'medicine_1720695978320.jpg');
+(1, 'nice', 1, 4, 2, 4, 1, '20', '2024-07-10', '2024-08-10', 'medicine_1720695978320.jpg'),
+(2, 'ARTESUNATE injectable', 1, 4, 2, 4, 1, '200', '2024-07-12', '2024-08-12', 'medicine_1720775913874.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_table`
+--
+
+CREATE TABLE `order_table` (
+  `id` int(11) NOT NULL,
+  `suborder` int(11) NOT NULL,
+  `grand_total` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -244,6 +278,14 @@ CREATE TABLE `stock` (
   `qty` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `stock`
+--
+
+INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `qty`) VALUES
+(1, 1, '20', '20', ''),
+(11, 2, '30', '30', '');
+
 -- --------------------------------------------------------
 
 --
@@ -264,6 +306,21 @@ CREATE TABLE `subcategory` (
 INSERT INTO `subcategory` (`id`, `name`, `category`, `photo`) VALUES
 (4, 'ACETAMINOPHEN injectable', 1, 'subcategory_1720680410195.png'),
 (5, 'ADRENALINE injectable', 1, 'subcategory_1720680494976.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `suborder`
+--
+
+CREATE TABLE `suborder` (
+  `id` int(11) NOT NULL,
+  `medicine` int(11) NOT NULL,
+  `expire` date NOT NULL,
+  `qty` varchar(500) NOT NULL,
+  `medicine_price` varchar(500) NOT NULL,
+  `total` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -340,6 +397,13 @@ ALTER TABLE `doctor`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `doctor_description`
+--
+ALTER TABLE `doctor_description`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `doctor` (`doctor`);
+
+--
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
@@ -352,6 +416,13 @@ ALTER TABLE `login`
 --
 ALTER TABLE `medicine`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_table`
+--
+ALTER TABLE `order_table`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `suborder` (`suborder`);
 
 --
 -- Indexes for table `pharmacy`
@@ -369,13 +440,21 @@ ALTER TABLE `role`
 -- Indexes for table `stock`
 --
 ALTER TABLE `stock`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `medicine` (`medicine`);
 
 --
 -- Indexes for table `subcategory`
 --
 ALTER TABLE `subcategory`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `suborder`
+--
+ALTER TABLE `suborder`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `medicine` (`medicine`);
 
 --
 -- Indexes for table `units`
@@ -424,6 +503,12 @@ ALTER TABLE `doctor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `doctor_description`
+--
+ALTER TABLE `doctor_description`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
@@ -433,7 +518,13 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `order_table`
+--
+ALTER TABLE `order_table`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
@@ -451,13 +542,19 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `suborder`
+--
+ALTER TABLE `suborder`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -470,6 +567,34 @@ ALTER TABLE `units`
 --
 ALTER TABLE `variant`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `doctor_description`
+--
+ALTER TABLE `doctor_description`
+  ADD CONSTRAINT `doctor_description_ibfk_1` FOREIGN KEY (`doctor`) REFERENCES `doctor` (`id`);
+
+--
+-- Constraints for table `order_table`
+--
+ALTER TABLE `order_table`
+  ADD CONSTRAINT `order_table_ibfk_1` FOREIGN KEY (`suborder`) REFERENCES `suborder` (`id`);
+
+--
+-- Constraints for table `stock`
+--
+ALTER TABLE `stock`
+  ADD CONSTRAINT `stock_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`);
+
+--
+-- Constraints for table `suborder`
+--
+ALTER TABLE `suborder`
+  ADD CONSTRAINT `suborder_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
