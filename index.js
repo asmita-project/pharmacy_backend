@@ -14,7 +14,7 @@ const composition = require('./master/composition/composition')
 const units = require('./master/units/unit')
 const medicine = require('./master/medicine/medicine')
 const stock = require('./master/stock/stock')
-
+const description = require('./master/description/description')
 app.use(bodyParsor.json());
 app.use(bodyParsor.urlencoded({ extended: true }));
 app.use(cors())
@@ -29,6 +29,8 @@ app.use('/units',units)
 app.use('/doctor',doctor)
 app.use('/medicine',medicine)
 app.use('/stock',stock)
+app.use('/description',description)
+
 app.use('/profile', express.static('upload/images'));
 app.use('/images',express.static('upload/category'));
 app.use('/subcategoryimg',express.static('upload/subcategory'));

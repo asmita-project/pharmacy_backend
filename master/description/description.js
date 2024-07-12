@@ -22,10 +22,13 @@ const isNonEmptyString = (value) => {
 
 // Middleware to validate incoming data
 const validateRequest = (req, res, next) => {
-    const {stock } = req.body
+    const { name,description } = req.body
 
-    if (!isNonEmptyString(stock)) {
-        return res.status(400).json({ error: 'stock is required must be a string integer.' });
+    if (!isNonEmptyString(name)) {
+        return res.status(400).json({ error: 'name is required must be a string integer.' });
+    }
+    if (!isNonEmptyString(description)) {
+        return res.status(400).json({ error: 'description is required must be a string integer.' });
     }
 
     next();
@@ -34,9 +37,9 @@ const validateRequest = (req, res, next) => {
 
 
 router.post('/',validateRequest,tokenverify,(req, res) => {
-    const { medicine,stock,balance } = req.body
-   
-    db.query('INSERT INTO stock(medicine,stock)VALUES(?,?,?)',[medicine,stock], function (err, result) {
+    const { name,description,doctor } = req.body
+     const date = new Date()
+    db.query('INSERT INTO doctor_description(name,description,doctor,date)VALUES(?,?,?,?)',[name,description,doctor,date], function (err, result) {
         if (err) {
             console.error(err.errno)
             res.status(400).json({ message:err.sqlMessage})
@@ -44,10 +47,10 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
         else {
             const id = result.insertId;
             console.log(result)
-            db.query('select * from stock where id=?', [id], function (err, result2) {
+            db.query('select * from doctor_description where id=?', [id], function (err, result2) {
                 if (err) {
                     console.error(err)
-                    res.status(400).json({ message: 'stock not found' })
+                    res.status(400).json({ message: 'doctor_description not found' })
                 }
                 else {
                     res.status(200).json(result2[0])
@@ -63,7 +66,7 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
 
 
 router.get('/',function(req,res){
-    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id FROM stock JOIN medicine ON stock.medicine = medicine.id',function(err,result){
+    db.query('SELECT doctor.name AS doctor_name,doctor.hospital,doctor.phone AS doctor_phone,doctor.address AS doctor_address,doctor_description.name,doctor_description.date,doctor_description.id,doctor_description.description,doctor.id AS doctor_id FROM doctor_description JOIN doctor ON doctor.id = doctor_description.doctor',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -73,13 +76,16 @@ router.get('/',function(req,res){
                 for (let i of result) {
                    let data = {
                        id:i.id,
-                       stock:i.stock,
-                       balance:i.balance,
+                       description:i.description,
+                       name:i.name,
+                       date:i.date,
                       
-                    medicine:{
-                        id:i.medicine_id,
-                        medicine_name:i.medicine_name,
-                        price:i.price
+                    doctor:{
+                        id:i.doctor_id,
+                        address:i.doctor_address,
+                        phone:i.doctor_phone,
+                        doctor:i.doctor_name
+
                     }            
                 }
                 DataList.push(data)
@@ -96,7 +102,7 @@ router.get('/',function(req,res){
 
 router.get('/:id',function(req,res){
     const {id}=req.body
-    db.query('select * from stock where id=?',[id],function(err,result){
+    db.query('select * from doctor_description where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -108,7 +114,7 @@ router.get('/:id',function(req,res){
 
 router.delete('/delete/:id',function(req,res){
     const {id}=req.params
-    db.query('delete from stock where id=?',[id],function(err,result){
+    db.query('delete from doctor_description where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -119,16 +125,16 @@ router.delete('/delete/:id',function(req,res){
 })
 
 router.post('/update',function(req,res){
-    const {id, medicine,stock,balance,qty } = req.body
-    db.query('update stock set medicine=?,stock=? where id=?',[medicine,stock,id],function(err,result){
+    const {id, description,name} = req.body
+    db.query('update doctor_description set name=?,description=? where id=?',[name,description,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            db.query('select * from stock where id=?', [id], function (err, result2) {
+            db.query('select * from doctor_description where id=?', [id], function (err, result2) {
                 if (err) {
                     console.error(err)
-                    res.status(400).json({ message: 'stock not found' })
+                    res.status(400).json({ message: 'doctor_description not found' })
                 }
                 else {
                     res.status(200).json(result2[0])

@@ -126,6 +126,7 @@ router.get('/',function(req,res){
            
            }
            else{
+            
                res.status(200).send(result)
            }
         }
@@ -133,12 +134,42 @@ router.get('/',function(req,res){
 })
 router.get('/:id',function(req,res){
     const {id}=req.params
-    db.query('select * from medicine where id=?',[id],function(err,result){
+    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.id AS companyid,composition.name AS comp_name,composition.id AS comp_id,units.name AS unit_name,units.id AS unit_id,medicine.id,medicine.name,medicine.photo,medicine.price,medicine.expiry,medicine.Manufacturing FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id JOIN units ON units.composition = composition.id JOIN medicine ON units.id = medicine.unit where medicine.id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            res.status(200).json(result[0])
+           
+            let data = {
+                id:result[0].id,
+                name:result[0].name,
+                price:result[0].price,
+                photo:result[0].photo,
+                manufacturing:result[0].Manufacturing,
+                expire:result[0].expiry,
+                category:{
+                    id:result[0].cateid,
+                    name:result[0].category
+                },
+                subcategory:{
+                    id:result[0].subcateid,
+                    name:result[0].subcateroryname
+                },
+                company:{
+                 id:result[0].companyid,
+                 name:result[0].companyname
+             },
+             composition:{
+                 id:result[0].comp_id,
+                 name:result[0].comp_name
+                
+             }  ,
+             unit:{
+                 id:result[0].unit_id,
+                 name:result[0].unit_name
+             }          
+         }
+         res.status(200).json(data)
         }
     })
 })
