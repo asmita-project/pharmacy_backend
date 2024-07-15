@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2024 at 03:09 PM
+-- Generation Time: Jul 15, 2024 at 03:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -152,7 +152,11 @@ CREATE TABLE `doctor_description` (
 --
 
 INSERT INTO `doctor_description` (`id`, `name`, `description`, `date`, `doctor`) VALUES
-(1, 'laxmi hanwatkar', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five cen', '2024-07-12', 1);
+(1, 'laxmi hanwatkar', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five cen', '2024-07-12', 1),
+(2, 'shalini mehta', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem', '2024-07-15', 1),
+(3, 'nirali', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem ', '2024-07-15', 1),
+(4, 'asmita gaikwad', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem ', '2024-07-15', 3),
+(5, 'lokesh meshram', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem ', '2024-07-15', 3);
 
 -- --------------------------------------------------------
 
@@ -215,7 +219,6 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 
 CREATE TABLE `order_table` (
   `id` int(11) NOT NULL,
-  `suborder` int(11) NOT NULL,
   `grand_total` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -275,16 +278,19 @@ CREATE TABLE `stock` (
   `medicine` int(11) NOT NULL,
   `stock` varchar(100) NOT NULL,
   `balance` varchar(100) NOT NULL,
-  `qty` varchar(100) NOT NULL
+  `qty` varchar(100) NOT NULL,
+  `pharmacy` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stock`
 --
 
-INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `qty`) VALUES
-(1, 1, '20', '20', ''),
-(11, 2, '30', '30', '');
+INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `qty`, `pharmacy`) VALUES
+(1, 1, '20', '', '', '8'),
+(11, 2, '30', '', '', '10'),
+(14, 2, '19', '', '', '10'),
+(15, 1, '30', '', '', '10');
 
 -- --------------------------------------------------------
 
@@ -319,7 +325,10 @@ CREATE TABLE `suborder` (
   `expire` date NOT NULL,
   `qty` varchar(500) NOT NULL,
   `medicine_price` varchar(500) NOT NULL,
-  `total` varchar(500) NOT NULL
+  `total` varchar(500) NOT NULL,
+  `pharmacy` int(11) NOT NULL,
+  `category` int(11) NOT NULL,
+  `suborder` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -421,8 +430,7 @@ ALTER TABLE `medicine`
 -- Indexes for table `order_table`
 --
 ALTER TABLE `order_table`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `suborder` (`suborder`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `pharmacy`
@@ -440,8 +448,7 @@ ALTER TABLE `role`
 -- Indexes for table `stock`
 --
 ALTER TABLE `stock`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `medicine` (`medicine`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `subcategory`
@@ -454,7 +461,10 @@ ALTER TABLE `subcategory`
 --
 ALTER TABLE `suborder`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `medicine` (`medicine`);
+  ADD KEY `medicine` (`medicine`),
+  ADD KEY `pharmacy` (`pharmacy`),
+  ADD KEY `category` (`category`),
+  ADD KEY `suborder` (`suborder`);
 
 --
 -- Indexes for table `units`
@@ -506,7 +516,7 @@ ALTER TABLE `doctor`
 -- AUTO_INCREMENT for table `doctor_description`
 --
 ALTER TABLE `doctor_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -542,7 +552,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
@@ -579,22 +589,12 @@ ALTER TABLE `doctor_description`
   ADD CONSTRAINT `doctor_description_ibfk_1` FOREIGN KEY (`doctor`) REFERENCES `doctor` (`id`);
 
 --
--- Constraints for table `order_table`
---
-ALTER TABLE `order_table`
-  ADD CONSTRAINT `order_table_ibfk_1` FOREIGN KEY (`suborder`) REFERENCES `suborder` (`id`);
-
---
--- Constraints for table `stock`
---
-ALTER TABLE `stock`
-  ADD CONSTRAINT `stock_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`);
-
---
 -- Constraints for table `suborder`
 --
 ALTER TABLE `suborder`
-  ADD CONSTRAINT `suborder_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`);
+  ADD CONSTRAINT `suborder_ibfk_1` FOREIGN KEY (`pharmacy`) REFERENCES `pharmacy` (`id`),
+  ADD CONSTRAINT `suborder_ibfk_2` FOREIGN KEY (`category`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `suborder_ibfk_3` FOREIGN KEY (`suborder`) REFERENCES `suborder` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
