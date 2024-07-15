@@ -25,7 +25,7 @@ const validateRequest = (req, res, next) => {
     const { stock } = req.body
 
     if (!isNonEmptyString(stock)) {
-        return res.status(400).json({ error: 'stock is required must be a string integer.' });
+        return res.status(400).send({ error: 'stock is required must be a string integer.' });
     }
 
     next();
@@ -36,21 +36,51 @@ const validateRequest = (req, res, next) => {
 router.post('/', tokenverify, (req, res) => {
 
     const { grandtotal, orders } = req.body
-    const Values = orders.map((item) => {
-        item.medicine,
-            item.qty,
-            item.medicine_price,
-            item.total,
-            item.pharmacy,
-            item.category
-    })
-    db.query('INSERT INTO order_table(grandtotal)VALUES(?)', [grandtotal],async function (err, result1) {
+   
+    db.query('INSERT INTO order_table(grand_total)VALUES(?)', [grandtotal],async function (err, result1) {
         if (err) {
             res.status(400).json({ message: err.sqlMessage })
         }
         else {
             const orderid = result1.insertId
-            ordernew(orderid, Values)
+            // res.status(200).json(req.body)
+            // const Values = orders.map((item) => {
+            //     item.medicine,
+            //         item.qty,
+            //         item.medicine_price,
+            //         item.total,
+            //         item.pharmacy,
+            //         item.category,
+            //         orderid
+            // })
+            orders.map((item)=>{
+                    //  item.medicine,
+                    // item.qty,
+                    // item.medicine_price,
+                    // item.total,
+                    // item.pharmacy,
+                    // item.category,
+                    // orderid
+                db.query('INSERT INTO suborder(medicine,qty,medicine_price,total,category,order_id)VALUES(?,?,?,?,?,?)',[item.medicine,item.qty,item.medicine_price,item.total,item.category,orderid],function (err, result) {
+                    if (err) {
+                        console.error(err.errno)
+                        res.status(400).send({ message: err,data:res.body })
+                    }
+                    else {
+                        const id = result.insertId;
+                        stockdata(item.medicine)
+                        res.status(200).send(result)
+                       
+            
+                    
+                    }
+            
+            
+                })
+            })
+            //  res.status(200).json(req.body)
+           
+           
           
         }
     })
@@ -58,38 +88,28 @@ router.post('/', tokenverify, (req, res) => {
 })
 
 const ordernew = (orderid,Values)=>{
-    db.query('INSERT INTO suborder(medicine,qty,medicine_price,total,pharmacy,category,suborder)VALUES(?,?,?,?,?,?,?)', [Values, orderid], async function (err, result) {
-        if (err) {
-            console.error(err.errno)
-            res.status(400).json({ message: err.sqlMessage })
-        }
-        else {
-            const id = result.insertId;
-            stockdata(id,Values)
-
-        
-        }
-
-
-    })
+   
 }
-const stockdata = (id,Values)=>{
-    const medicinevalue = Values.map((entry) => {
-        entry.medicine
-    })
-    const pharmacyvalues = Values.map((item) => {
-        item.pharmacy
-    })
+const stockdata = (Values)=>{
 
-    console.log(result)
-    db.query('SELECT * FROM stock WHERE pharmacy IN (?) AND medicine IN (?)', [pharmacyvalues,medicinevalue], function (err, result2) {
+    db.query('SELECT stock.id AS stock_id,stock.stock,stock.balance,suborder.qty,suborder.medicine AS medicine_id FROM stock JOIN suborder ON suborder.medicine = stock.medicine WHERE suborder.medicine IN(?)', [Values], function (err, result2) {
         if (err) {
             console.error(err)
             res.status(400).json({ message: 'stock not found' })
         }
         else {
-              
-            res.status(200).json(result2[0])
+            const totaldata=result2.map((item)=>{
+                const totalbalance = item.stock -item.qty
+                db.query('update stock set balance=? where id=?',[totalbalance,item.stock_id],function(err,result3){
+                    if(err){
+                        throw err
+                    }
+                    else{
+                        res.status(200).json(result3)
+                    }
+                })
+            }) 
+           
         }
     })
 }
