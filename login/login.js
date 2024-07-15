@@ -40,16 +40,26 @@ router.post('/', function (req, res) {
                         }
                     })
                 }
-                //  else if (user.role == 'Pharmacy') {
-                //     db.query('select * from pharmacy where id=?',[user.register],function(err,roledata){
-                //         if (err) {
-                //             return res.status(400).send('Invalid credentials');
-                //         }
-                //         else{
-                //             res.status(200).json({ token,user:roledata[0] });
-                //         }
-                //     })
-                //  }
+                 else if (user.role == 'Pharmacy') {
+                    db.query('select * from pharmacy where id=?',[user.register],function(err,roledata){
+                        if (err) {
+                            return res.status(400).send('Invalid credentials');
+                        }
+                        else{
+                            res.status(200).json({ token,user:roledata[0] });
+                        }
+                    })
+                 }
+                 else if (user.role == 'Doctor') {
+                    db.query('select * from doctor where id=?',[user.register],function(err,roledata){
+                        if (err) {
+                            return res.status(400).send('Invalid credentials');
+                        }
+                        else{
+                            res.status(200).json({ token,user:roledata[0] });
+                        }
+                    })
+                 }
 
             }
 
