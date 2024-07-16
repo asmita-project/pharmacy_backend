@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 15, 2024 at 03:09 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Generation Time: Jul 16, 2024 at 09:17 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +34,7 @@ CREATE TABLE `admin` (
   `phone` varchar(10) NOT NULL,
   `photo` varchar(50) NOT NULL,
   `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
@@ -53,7 +53,7 @@ CREATE TABLE `category` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `category`
@@ -75,7 +75,7 @@ CREATE TABLE `company` (
   `category` int(100) NOT NULL,
   `subcategory` int(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `company`
@@ -98,7 +98,7 @@ CREATE TABLE `composition` (
   `subcategory` int(11) NOT NULL,
   `company` int(11) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `composition`
@@ -123,7 +123,7 @@ CREATE TABLE `doctor` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doctor`
@@ -145,7 +145,7 @@ CREATE TABLE `doctor_description` (
   `description` varchar(500) NOT NULL,
   `date` date NOT NULL,
   `doctor` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doctor_description`
@@ -170,7 +170,7 @@ CREATE TABLE `login` (
   `password` varchar(100) NOT NULL,
   `role` varchar(11) NOT NULL,
   `register` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
@@ -201,7 +201,7 @@ CREATE TABLE `medicine` (
   `Manufacturing` date NOT NULL,
   `expiry` date NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `medicine`
@@ -220,7 +220,20 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 CREATE TABLE `order_table` (
   `id` int(11) NOT NULL,
   `grand_total` varchar(1000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_table`
+--
+
+INSERT INTO `order_table` (`id`, `grand_total`) VALUES
+(83, '220'),
+(84, '220'),
+(85, '220'),
+(86, '220'),
+(87, '220'),
+(88, '220'),
+(89, '220');
 
 -- --------------------------------------------------------
 
@@ -237,7 +250,7 @@ CREATE TABLE `pharmacy` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pharmacy`
@@ -256,7 +269,7 @@ INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `rol
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `role` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `role`
@@ -278,19 +291,18 @@ CREATE TABLE `stock` (
   `medicine` int(11) NOT NULL,
   `stock` varchar(100) NOT NULL,
   `balance` varchar(100) NOT NULL,
-  `qty` varchar(100) NOT NULL,
   `pharmacy` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stock`
 --
 
-INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `qty`, `pharmacy`) VALUES
-(1, 1, '20', '', '', '8'),
-(11, 2, '30', '', '', '10'),
-(14, 2, '19', '', '', '10'),
-(15, 1, '30', '', '', '10');
+INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`) VALUES
+(1, 1, '20', '19', '8'),
+(11, 2, '30', '29', '10'),
+(14, 2, '19', '18', '10'),
+(15, 1, '30', '29', '10');
 
 -- --------------------------------------------------------
 
@@ -303,7 +315,7 @@ CREATE TABLE `subcategory` (
   `name` varchar(100) NOT NULL,
   `category` int(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subcategory`
@@ -326,10 +338,30 @@ CREATE TABLE `suborder` (
   `qty` varchar(500) NOT NULL,
   `medicine_price` varchar(500) NOT NULL,
   `total` varchar(500) NOT NULL,
-  `pharmacy` int(11) NOT NULL,
   `category` int(11) NOT NULL,
-  `suborder` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `order_id` varchar(300) NOT NULL,
+  `phamacy_id` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `suborder`
+--
+
+INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`) VALUES
+(69, 2, '0000-00-00', '1', '200', '200', 1, '83', '10'),
+(70, 1, '0000-00-00', '1', '20', '20', 1, '83', '10'),
+(71, 2, '0000-00-00', '1', '200', '200', 1, '84', '10'),
+(72, 1, '0000-00-00', '1', '20', '20', 1, '84', '10'),
+(73, 2, '0000-00-00', '1', '200', '200', 1, '85', '10'),
+(74, 1, '0000-00-00', '1', '20', '20', 1, '85', '10'),
+(75, 2, '0000-00-00', '1', '200', '200', 1, '86', '10'),
+(76, 1, '0000-00-00', '1', '20', '20', 1, '86', '10'),
+(77, 2, '0000-00-00', '1', '200', '200', 1, '87', '10'),
+(78, 1, '0000-00-00', '1', '20', '20', 1, '87', '10'),
+(79, 2, '0000-00-00', '1', '200', '200', 1, '88', '10'),
+(80, 1, '0000-00-00', '1', '20', '20', 1, '88', '10'),
+(81, 2, '0000-00-00', '1', '200', '200', 1, '89', '10'),
+(82, 1, '0000-00-00', '1', '20', '20', 1, '89', '10');
 
 -- --------------------------------------------------------
 
@@ -344,7 +376,7 @@ CREATE TABLE `units` (
   `subcategory` int(11) NOT NULL,
   `company` int(11) NOT NULL,
   `composition` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `units`
@@ -367,7 +399,7 @@ CREATE TABLE `variant` (
   `subcategory` int(11) NOT NULL,
   `company` int(11) NOT NULL,
   `photo` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -462,9 +494,8 @@ ALTER TABLE `subcategory`
 ALTER TABLE `suborder`
   ADD PRIMARY KEY (`id`),
   ADD KEY `medicine` (`medicine`),
-  ADD KEY `pharmacy` (`pharmacy`),
   ADD KEY `category` (`category`),
-  ADD KEY `suborder` (`suborder`);
+  ADD KEY `suborder` (`order_id`);
 
 --
 -- Indexes for table `units`
@@ -534,7 +565,7 @@ ALTER TABLE `medicine`
 -- AUTO_INCREMENT for table `order_table`
 --
 ALTER TABLE `order_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
@@ -564,7 +595,7 @@ ALTER TABLE `subcategory`
 -- AUTO_INCREMENT for table `suborder`
 --
 ALTER TABLE `suborder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -592,9 +623,7 @@ ALTER TABLE `doctor_description`
 -- Constraints for table `suborder`
 --
 ALTER TABLE `suborder`
-  ADD CONSTRAINT `suborder_ibfk_1` FOREIGN KEY (`pharmacy`) REFERENCES `pharmacy` (`id`),
-  ADD CONSTRAINT `suborder_ibfk_2` FOREIGN KEY (`category`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `suborder_ibfk_3` FOREIGN KEY (`suborder`) REFERENCES `suborder` (`id`);
+  ADD CONSTRAINT `suborder_ibfk_2` FOREIGN KEY (`category`) REFERENCES `category` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
