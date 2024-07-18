@@ -50,12 +50,12 @@ const upload = multer({storage
 })
 
 router.post('/',upload.single('medicine'),validateRequest,tokenverify,(req, res) => {
-    const { name,category,subcategory,composition,company,unit,price,manufacturing,expire} = req.body;
+    const { name,category,subcategory,composition,company,unit,price} = req.body;
     const file = req.file;
     if (!file) {
         return res.status(400).send('No file uploaded.');
       }
-    db.query('INSERT INTO medicine(name,category,subcategory,company,composition,unit,price,manufacturing,expiry,photo)VALUES(?,?,?,?,?,?,?,?,?,?)',[name,category,subcategory,company,composition,unit,price,manufacturing,expire,file.filename], function (err, result) {
+    db.query('INSERT INTO medicine(name,category,subcategory,company,composition,unit,price,photo)VALUES(?,?,?,?,?,?,?,?,)',[name,category,subcategory,company,composition,unit,price,file.filename], function (err, result) {
         if (err) {
             console.error(err)
             res.status(400).json({ message: 'Server Problem' })
@@ -82,7 +82,7 @@ router.post('/',upload.single('medicine'),validateRequest,tokenverify,(req, res)
 
 
 router.get('/',function(req,res){
-    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.id AS companyid,composition.name AS comp_name,composition.id AS comp_id,units.name AS unit_name,units.id AS unit_id,medicine.id,medicine.name,medicine.photo,medicine.price,medicine.expiry,medicine.Manufacturing FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id JOIN units ON units.composition = composition.id JOIN medicine ON units.id = medicine.unit',function(err,result){
+    db.query('SELECT medicine.id, subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,medicine.name,medicine.photo,medicine.price,medicine.composition,medicine.company,medicine.unit FROM subcategory JOIN category ON subcategory.category = category.id JOIN medicine ON subcategory.id = medicine.subcategory',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -95,8 +95,9 @@ router.get('/',function(req,res){
                        name:i.name,
                        price:i.price,
                        photo:i.photo,
-                       manufacturing:i.Manufacturing,
-                       expire:i.expiry,
+                       composition:i.composition,
+                       company:i.company,
+                       unit:i.unit,
                        category:{
                            id:i.cateid,
                            name:i.category
@@ -105,19 +106,7 @@ router.get('/',function(req,res){
                            id:i.subcateid,
                            name:i.subcateroryname
                        },
-                       company:{
-                        id:i.companyid,
-                        name:i.companyname
-                    },
-                    composition:{
-                        id:i.comp_id,
-                        name:i.comp_name
-                       
-                    }  ,
-                    unit:{
-                        id:i.unit_id,
-                        name:i.unit_name
-                    }          
+                            
                 }
                 DataList.push(data)
                }
@@ -134,7 +123,7 @@ router.get('/',function(req,res){
 })
 router.get('/:id',function(req,res){
     const {id}=req.params
-    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.id AS companyid,composition.name AS comp_name,composition.id AS comp_id,units.name AS unit_name,units.id AS unit_id,medicine.id,medicine.name,medicine.photo,medicine.price,medicine.expiry,medicine.Manufacturing FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id JOIN units ON units.composition = composition.id JOIN medicine ON units.id = medicine.unit where medicine.id=?',[id],function(err,result){
+    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,medicine.id,medicine.name,medicine.photo,medicine.price,medicine.composition,medicine.company,medicine.unit FROM subcategory JOIN category ON subcategory.category = category.id JOIN medicine ON subcategory.id = medicine.subcategory where medicine.id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -147,6 +136,9 @@ router.get('/:id',function(req,res){
                 photo:result[0].photo,
                 manufacturing:result[0].Manufacturing,
                 expire:result[0].expiry,
+                composition:result[0].composition,
+                company:result[0].company,
+                unit:result[0].unit,
                 category:{
                     id:result[0].cateid,
                     name:result[0].category
@@ -155,19 +147,7 @@ router.get('/:id',function(req,res){
                     id:result[0].subcateid,
                     name:result[0].subcateroryname
                 },
-                company:{
-                 id:result[0].companyid,
-                 name:result[0].companyname
-             },
-             composition:{
-                 id:result[0].comp_id,
-                 name:result[0].comp_name
-                
-             }  ,
-             unit:{
-                 id:result[0].unit_id,
-                 name:result[0].unit_name
-             }          
+                         
          }
          res.status(200).json(data)
         }

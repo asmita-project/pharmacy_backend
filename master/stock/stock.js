@@ -35,8 +35,8 @@ const validateRequest = (req, res, next) => {
 
 
 router.post('/',validateRequest,tokenverify,(req, res) => {
-    const { medicine,stock,pharmacy } = req.body
-     db.query('select * from stock where medicine=? And pharmacy=?',[medicine,pharmacy],function(err,result3){
+    const { medicine,stock,pharmacy,batch,expire } = req.body
+     db.query('select * from stock where medicine=? And pharmacy=? And batch=?',[medicine,pharmacy,batch],function(err,result3){
          if (err) {
             res.status(400).json({ message:'duplicate'})
          }
@@ -45,7 +45,7 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
                 res.status(400).json({ message:'Duplicate entry'})
             }
             else{
-                db.query('INSERT INTO stock(medicine,stock,pharmacy)VALUES(?,?,?)',[medicine,stock,pharmacy], function (err, result) {
+                db.query('INSERT INTO stock(medicine,stock,pharmacy,batch,expire,balance,min_stock)VALUES(?,?,?,?,?,?,?)',[medicine,stock,pharmacy,batch,expire,stock,10], function (err, result) {
                     if (err) {
                         console.error(err.errno)
                         res.status(400).json({ message:err.sqlMessage})
@@ -78,7 +78,7 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
 
 
 router.get('/',function(req,res){
-    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy',function(err,result){
+    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id,stock.balance,stock.batch,stock.expire,stock.min_stock,medicine.photo FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -90,11 +90,15 @@ router.get('/',function(req,res){
                        id:i.id,
                        stock:i.stock,
                        balance:i.balance,
+                       min_stock:i.min_stock,
+                       batch:i.batch,
+                       expire:i.expire,
                       
                     medicine:{
                         id:i.medicine_id,
                         medicine_name:i.medicine_name,
-                        price:i.price
+                        price:i.price,
+                        photo:i.photo
                     },
                     pharmacy:{
                         id:i.pharmacy_id,
@@ -163,8 +167,8 @@ router.delete('/delete/:id',function(req,res){
 })
 
 router.post('/update',function(req,res){
-    const {id, medicine,stock,pharmacy } = req.body
-    db.query('update stock set medicine=?,stock=?,pharmacy=? where id=?',[medicine,stock,pharmacy,id],function(err,result){
+    const {id, medicine,stock,pharmacy,batch,balance,expire } = req.body
+    db.query('update stock set medicine=?,stock=?,pharmacy=?,balance=?,batch=?,expire=? where id=?',[medicine,stock,pharmacy,balance,batch,expire,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
