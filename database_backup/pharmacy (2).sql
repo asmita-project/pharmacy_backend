@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 18, 2024 at 03:10 PM
+-- Generation Time: Jul 19, 2024 at 03:12 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -74,8 +74,8 @@ INSERT INTO `category` (`id`, `name`, `photo`) VALUES
 CREATE TABLE `company` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `category` int(100) NOT NULL,
-  `subcategory` int(100) NOT NULL,
+  `category` int(100) DEFAULT NULL,
+  `subcategory` int(100) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -90,7 +90,8 @@ INSERT INTO `company` (`id`, `name`, `category`, `subcategory`, `photo`) VALUES
 (9, 'company4', 5, 6, 'company_1721200549215.jpeg'),
 (11, 'Company3', 1, 5, 'company_1721200643967.jpeg'),
 (12, 'company5', 2, 7, 'company_1721206440055.jpeg'),
-(13, 'ZOXIL S Pvt Ltd', 2, 7, 'company_1721209976440.jpg');
+(13, 'ZOXIL S Pvt Ltd', 2, 7, 'company_1721209976440.jpg'),
+(14, 'abcs', 0, 0, 'company_1721365267031.webp');
 
 -- --------------------------------------------------------
 
@@ -101,9 +102,9 @@ INSERT INTO `company` (`id`, `name`, `category`, `subcategory`, `photo`) VALUES
 CREATE TABLE `composition` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `category` int(11) NOT NULL,
-  `subcategory` int(11) NOT NULL,
-  `company` int(11) NOT NULL,
+  `category` varchar(11) DEFAULT NULL,
+  `subcategory` varchar(11) DEFAULT NULL,
+  `company` varchar(11) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -112,9 +113,30 @@ CREATE TABLE `composition` (
 --
 
 INSERT INTO `composition` (`id`, `name`, `category`, `subcategory`, `company`, `photo`) VALUES
-(1, 'composition 1', 1, 5, 5, 'composition_1720680778660.png'),
-(2, 'composition 2', 1, 4, 4, 'composition_1720680868917.png'),
-(3, 'Composition', 1, 4, 4, 'composition_1721199790673.jpeg');
+(1, 'composition 1', '1', '5', '5', 'composition_1720680778660.png'),
+(2, 'composition 2', '1', '4', '4', 'composition_1720680868917.png'),
+(3, 'Composition', '1', '4', '4', 'composition_1721199790673.jpeg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `description`
+--
+
+CREATE TABLE `description` (
+  `id` int(11) NOT NULL,
+  `category` varchar(200) NOT NULL,
+  `medicine` varchar(200) NOT NULL,
+  `take` varchar(200) NOT NULL,
+  `description` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `description`
+--
+
+INSERT INTO `description` (`id`, `category`, `medicine`, `take`, `description`) VALUES
+(1, '1', 'nice', 'before lunch', 7);
 
 -- --------------------------------------------------------
 
@@ -138,7 +160,8 @@ CREATE TABLE `doctor` (
 --
 
 INSERT INTO `doctor` (`id`, `name`, `hospital`, `address`, `phone`, `email`, `role`, `photo`) VALUES
-(4, 'Pravin Mendhe', 'P.M. Hospital', 'Kharbi Nagpur', '9579908433', 'vipin30@gmail.com', 'Doctor', '');
+(4, 'Pravin Mendhe', 'P.M. Hospital', 'Kharbi Nagpur', '9579908433', 'vipin30@gmail.com', 'Doctor', ''),
+(5, 'Dr.mukesh', 'city hospital', 'manish nagar', '8987678767', 'mukesh@gmail.com', 'Doctor', '');
 
 -- --------------------------------------------------------
 
@@ -149,17 +172,45 @@ INSERT INTO `doctor` (`id`, `name`, `hospital`, `address`, `phone`, `email`, `ro
 CREATE TABLE `doctor_description` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `description` varchar(500) NOT NULL,
   `date` date NOT NULL,
-  `doctor` int(11) NOT NULL
+  `doctor` int(11) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `age` varchar(3) NOT NULL,
+  `weight` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `doctor_description`
 --
 
-INSERT INTO `doctor_description` (`id`, `name`, `description`, `date`, `doctor`) VALUES
-(6, 'Asmita Patil', 'dghsc\njhcjskck\nkjdskljckl', '2024-07-17', 4);
+INSERT INTO `doctor_description` (`id`, `name`, `date`, `doctor`, `phone`, `age`, `weight`) VALUES
+(7, 'Ms.payal gupta', '2024-07-19', 5, '20', '20', '12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expire_medicine`
+--
+
+CREATE TABLE `expire_medicine` (
+  `id` int(11) NOT NULL,
+  `medicine` int(11) NOT NULL,
+  `stock` varchar(500) NOT NULL,
+  `balance` varchar(500) NOT NULL,
+  `expire` date NOT NULL,
+  `batch` varchar(200) NOT NULL,
+  `min_stock` varchar(500) NOT NULL,
+  `phar` int(11) NOT NULL,
+  `pharmacy` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `expire_medicine`
+--
+
+INSERT INTO `expire_medicine` (`id`, `medicine`, `stock`, `balance`, `expire`, `batch`, `min_stock`, `phar`, `pharmacy`) VALUES
+(9, 1, '100', '100', '2024-07-19', 'A', '10', 0, 15),
+(10, 3, '100', '100', '2024-06-30', 'B', '10', 0, 15);
 
 -- --------------------------------------------------------
 
@@ -180,7 +231,9 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `username`, `password`, `role`, `register`) VALUES
-(26, 'sagar@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Pharmacy', 15);
+(26, 'sagar@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Pharmacy', 15),
+(27, 'admin@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Admin', 13),
+(28, 'mukesh@gmail.com', '$2a$10$ZPVo9dyfqlbHKJCe9fQZwekF6mqAt1On7j/JnUgRV6f2XwdXuEIlO', 'Doctor', 5);
 
 -- --------------------------------------------------------
 
@@ -288,8 +341,10 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
-(17, 1, '100', '100', '15', '2024-07-19', 'A', '10'),
-(19, 3, '100', '100', '15', '2024-06-30', 'B', '10');
+(20, 2, '40', '40', '15', '2024-07-20', 'B', '10'),
+(21, 2, '100', '100', '15', '2024-07-20', 'A', '10'),
+(22, 3, '100', '100', '15', '2024-07-21', 'A', '10'),
+(23, 3, '100', '100', '15', '2024-09-25', 'B', '10');
 
 -- --------------------------------------------------------
 
@@ -341,10 +396,10 @@ CREATE TABLE `suborder` (
 CREATE TABLE `units` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `category` int(11) NOT NULL,
-  `subcategory` int(11) NOT NULL,
-  `company` int(11) NOT NULL,
-  `composition` int(11) NOT NULL
+  `category` varchar(11) DEFAULT NULL,
+  `subcategory` varchar(11) DEFAULT NULL,
+  `company` int(11) DEFAULT NULL,
+  `composition` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -352,10 +407,10 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `name`, `category`, `subcategory`, `company`, `composition`) VALUES
-(1, 'strips', 1, 4, 4, 2),
-(2, 'PCS', 1, 4, 4, 2),
-(4, 'ml1', 1, 5, 4, 2),
-(5, 'pcs1', 1, 5, 5, 1);
+(1, 'strips', '1', '4', 4, '2'),
+(2, 'PCS', '1', '4', 4, '2'),
+(4, 'ml1', '1', '5', 4, '2'),
+(5, 'pcs1', '1', '5', 5, '1');
 
 -- --------------------------------------------------------
 
@@ -403,6 +458,13 @@ ALTER TABLE `composition`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `description`
+--
+ALTER TABLE `description`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `description` (`description`);
+
+--
 -- Indexes for table `doctor`
 --
 ALTER TABLE `doctor`
@@ -414,6 +476,14 @@ ALTER TABLE `doctor`
 ALTER TABLE `doctor_description`
   ADD PRIMARY KEY (`id`),
   ADD KEY `doctor` (`doctor`);
+
+--
+-- Indexes for table `expire_medicine`
+--
+ALTER TABLE `expire_medicine`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `medicine` (`medicine`),
+  ADD KEY `pharmacy` (`pharmacy`);
 
 --
 -- Indexes for table `login`
@@ -500,7 +570,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `composition`
@@ -509,22 +579,34 @@ ALTER TABLE `composition`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `description`
+--
+ALTER TABLE `description`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `doctor`
 --
 ALTER TABLE `doctor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `doctor_description`
 --
 ALTER TABLE `doctor_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `expire_medicine`
+--
+ALTER TABLE `expire_medicine`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `medicine`
@@ -554,7 +636,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
@@ -585,10 +667,23 @@ ALTER TABLE `variant`
 --
 
 --
+-- Constraints for table `description`
+--
+ALTER TABLE `description`
+  ADD CONSTRAINT `description_ibfk_1` FOREIGN KEY (`description`) REFERENCES `doctor_description` (`id`);
+
+--
 -- Constraints for table `doctor_description`
 --
 ALTER TABLE `doctor_description`
   ADD CONSTRAINT `doctor_description_ibfk_1` FOREIGN KEY (`doctor`) REFERENCES `doctor` (`id`);
+
+--
+-- Constraints for table `expire_medicine`
+--
+ALTER TABLE `expire_medicine`
+  ADD CONSTRAINT `expire_medicine_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`),
+  ADD CONSTRAINT `expire_medicine_ibfk_2` FOREIGN KEY (`pharmacy`) REFERENCES `pharmacy` (`id`);
 
 --
 -- Constraints for table `suborder`
