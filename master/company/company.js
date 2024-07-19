@@ -109,35 +109,12 @@ router.get('/subcategoryyby/:id',function(req,res){
     })
 })
 router.get('/',function(req,res){
-    db.query('SELECT subcategory.id AS subcateid,subcategory.name,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.photo,company.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id',function(err,result){
+    db.query('select * from company',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            if (result.length>=0) {
-             const DataList=[]
-             for (let i of result) {
-                let data = {
-                    id:i.id,
-                    name:i.companyname,
-                    photo:i.photo,
-                    category:{
-                        id:i.cateid,
-                        name:i.category
-                    },
-                    subcategory:{
-                        id:i.subcateid,
-                        name:i.name
-                    }         
-             }
-             DataList.push(data)
-            }
-            res.status(200).send(DataList)
-        
-        }
-        else{
             res.status(200).send(result)
-        }
     }
 })
 })
@@ -166,8 +143,8 @@ router.delete('/delete/:id',function(req,res){
 })
 
 router.post('/update',tokenverify,function(req,res){
-    const {id,name,category,subcategory}=req.body
-    db.query('update company set name=?,category=?,subcategory=? where id=?',[name,category,subcategory,id],function(err,result){
+    const {id,name}=req.body
+    db.query('update company set name=? where id=?',[name,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }

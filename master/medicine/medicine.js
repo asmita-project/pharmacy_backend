@@ -121,6 +121,17 @@ router.get('/',function(req,res){
         }
     })
 })
+router.get('/categoryby/:id',function(req,res){
+    const {id} = req.params
+    db.query('SELECT * FROM medicine WHERE category=?',[id],function(err,result){
+        if (err) {
+            res.status(400).send({message:'sql error'})
+        }
+        else{
+            res.status(200).send(result)
+        }
+    })
+})
 router.get('/:id',function(req,res){
     const {id}=req.params
     db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,medicine.id,medicine.name,medicine.photo,medicine.price,medicine.composition,medicine.company,medicine.unit FROM subcategory JOIN category ON subcategory.category = category.id JOIN medicine ON subcategory.id = medicine.subcategory where medicine.id=?',[id],function(err,result){

@@ -79,39 +79,12 @@ router.post('/',upload.single('composition'),validateRequest,tokenverify,(req, r
 
 
 router.get('/',function(req,res){
-    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,composition.photo,company.id AS companyid,composition.name,composition.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id',function(err,result){
+    db.query('select * from composition',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            if (result.length>=0) {
-                const DataList=[]
-                for (let i of result) {
-                   let data = {
-                       id:i.id,
-                       name:i.name,
-                       photo:i.photo,
-                       category:{
-                           id:i.cateid,
-                           name:i.category
-                       },
-                       subcategory:{
-                           id:i.subcateid,
-                           name:i.subcateroryname
-                       },
-                       company:{
-                        id:i.companyid,
-                        name:i.companyname
-                    }            
-                }
-                DataList.push(data)
-               }
-               res.status(200).send(DataList)
-           
-           }
-           else{
-               res.status(200).send(result)
-           }
+            res.status(200).send(result)
         }
     })
 })
@@ -171,8 +144,8 @@ router.delete('/delete/:id',function(req,res){
 })
 
 router.post('/update',function(req,res){
-    const {id,name,category,subcategory,company}=req.body
-    db.query('update composition set name=?,category=?,subcategory=?,company=? where id=?',[name,category,subcategory,company,id],function(err,result){
+    const {id,name}=req.body
+    db.query('update composition set name=? where id=?',[name,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }

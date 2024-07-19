@@ -63,43 +63,12 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
 
 
 router.get('/',function(req,res){
-    db.query('SELECT subcategory.id AS subcateid,subcategory.name AS subcateroryname,category.name AS category,subcategory.category AS cateid,company.name AS companyname,company.id AS companyid,composition.name AS comp_name,composition.id AS comp_id,units.name,units.id FROM subcategory JOIN category ON subcategory.category = category.id JOIN company ON company.subcategory = subcategory.id JOIN composition ON composition.company = company.id JOIN units ON units.composition = composition.id',function(err,result){
+    db.query('select * from units',function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
         else{
-            if (result.length>=0) {
-                const DataList=[]
-                for (let i of result) {
-                   let data = {
-                       id:i.id,
-                       name:i.name,
-                       category:{
-                           id:i.cateid,
-                           name:i.category
-                       },
-                       subcategory:{
-                           id:i.subcateid,
-                           name:i.subcateroryname
-                       },
-                       company:{
-                        id:i.companyid,
-                        name:i.companyname
-                    },
-                    composition:{
-                        id:i.comp_id,
-                        name:i.comp_name
-                       
-                    }            
-                }
-                DataList.push(data)
-               }
-               res.status(200).send(DataList)
-           
-           }
-           else{
-               res.status(200).send(result)
-           }
+            res.status(200).send(result)
         }
     })
 })
@@ -158,8 +127,8 @@ router.delete('/delete/:id',function(req,res){
 })
 
 router.post('/update',function(req,res){
-    const {id,name,category,subcategory,company,composition}=req.body
-    db.query('update units set name=?,category=?,subcategory=?,company=?,composition=? where id=?',[name,category,subcategory,company,composition,id],function(err,result){
+    const {id,name}=req.body
+    db.query('update units set name=? where id=?',[name,id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
