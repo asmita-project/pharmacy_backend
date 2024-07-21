@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2024 at 03:12 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Generation Time: Jul 21, 2024 at 08:21 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +34,7 @@ CREATE TABLE `admin` (
   `phone` varchar(10) NOT NULL,
   `photo` varchar(50) NOT NULL,
   `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
@@ -53,7 +53,7 @@ CREATE TABLE `category` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `category`
@@ -77,7 +77,7 @@ CREATE TABLE `company` (
   `category` int(100) DEFAULT NULL,
   `subcategory` int(100) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `company`
@@ -106,7 +106,7 @@ CREATE TABLE `composition` (
   `subcategory` varchar(11) DEFAULT NULL,
   `company` varchar(11) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `composition`
@@ -129,7 +129,7 @@ CREATE TABLE `description` (
   `medicine` varchar(200) NOT NULL,
   `take` varchar(200) NOT NULL,
   `description` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `description`
@@ -153,7 +153,7 @@ CREATE TABLE `doctor` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doctor`
@@ -177,7 +177,7 @@ CREATE TABLE `doctor_description` (
   `phone` varchar(10) NOT NULL,
   `age` varchar(3) NOT NULL,
   `weight` varchar(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doctor_description`
@@ -202,7 +202,7 @@ CREATE TABLE `expire_medicine` (
   `min_stock` varchar(500) NOT NULL,
   `phar` int(11) NOT NULL,
   `pharmacy` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `expire_medicine`
@@ -210,7 +210,10 @@ CREATE TABLE `expire_medicine` (
 
 INSERT INTO `expire_medicine` (`id`, `medicine`, `stock`, `balance`, `expire`, `batch`, `min_stock`, `phar`, `pharmacy`) VALUES
 (9, 1, '100', '100', '2024-07-19', 'A', '10', 0, 15),
-(10, 3, '100', '100', '2024-06-30', 'B', '10', 0, 15);
+(10, 3, '100', '100', '2024-06-30', 'B', '10', 0, 15),
+(11, 2, '40', '40', '2024-07-20', 'B', '10', 0, 15),
+(12, 2, '100', '100', '2024-07-20', 'A', '10', 0, 15),
+(13, 3, '100', '100', '2024-07-21', 'A', '10', 0, 15);
 
 -- --------------------------------------------------------
 
@@ -224,7 +227,7 @@ CREATE TABLE `login` (
   `password` varchar(100) NOT NULL,
   `role` varchar(11) NOT NULL,
   `register` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
@@ -253,7 +256,7 @@ CREATE TABLE `medicine` (
   `Manufacturing` date DEFAULT NULL,
   `expiry` date DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `medicine`
@@ -273,7 +276,7 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 CREATE TABLE `order_table` (
   `id` int(11) NOT NULL,
   `grand_total` varchar(1000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -290,7 +293,7 @@ CREATE TABLE `pharmacy` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pharmacy`
@@ -308,7 +311,7 @@ INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `rol
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `role` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `role`
@@ -334,17 +337,16 @@ CREATE TABLE `stock` (
   `expire` date DEFAULT NULL,
   `batch` varchar(200) NOT NULL,
   `min_stock` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stock`
 --
 
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
-(20, 2, '40', '40', '15', '2024-07-20', 'B', '10'),
-(21, 2, '100', '100', '15', '2024-07-20', 'A', '10'),
-(22, 3, '100', '100', '15', '2024-07-21', 'A', '10'),
-(23, 3, '100', '100', '15', '2024-09-25', 'B', '10');
+(23, 3, '100', '100', '15', '2024-09-25', 'B', '10'),
+(24, 1, '100', '100', '15', '2024-09-21', 'B', '10'),
+(25, 2, '100', '100', '15', '2024-10-21', 'B', '10');
 
 -- --------------------------------------------------------
 
@@ -357,7 +359,7 @@ CREATE TABLE `subcategory` (
   `name` varchar(100) NOT NULL,
   `category` int(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subcategory`
@@ -385,7 +387,7 @@ CREATE TABLE `suborder` (
   `category` int(11) NOT NULL,
   `order_id` varchar(300) NOT NULL,
   `phamacy_id` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -400,7 +402,7 @@ CREATE TABLE `units` (
   `subcategory` varchar(11) DEFAULT NULL,
   `company` int(11) DEFAULT NULL,
   `composition` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `units`
@@ -425,7 +427,7 @@ CREATE TABLE `variant` (
   `subcategory` int(11) NOT NULL,
   `company` int(11) NOT NULL,
   `photo` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -600,7 +602,7 @@ ALTER TABLE `doctor_description`
 -- AUTO_INCREMENT for table `expire_medicine`
 --
 ALTER TABLE `expire_medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -636,7 +638,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `subcategory`

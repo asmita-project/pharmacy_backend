@@ -2,10 +2,8 @@ const express = require('express')
 const app = express()
 const router = express.Router()
 const bodyParsor = require('body-parser')
-const bcrypt = require('bcryptjs');
 const db = require('../../database/db')
 const tokenverify = require('../../tokenverify/tokenverify');
-const e = require('express');
 
 app.use(bodyParsor.json());
 app.use(bodyParsor.urlencoded({ extended: true }));
@@ -76,7 +74,16 @@ router.post('/',validateRequest,tokenverify,(req, res) => {
   
 })
 
-
+router.get('/expire',function(req,res){
+    db.query('select * from expire_medicine',function(err,result){
+        if (err) {
+            throw err
+        }
+        else{
+            res.status(200).send(result)
+        }
+    })
+})
 router.get('/',function(req,res){
     db.query('SELECT * FROM `stock` WHERE expire<=CURRENT_DATE',function(err1,result2){
         if (err1) {
@@ -266,7 +273,43 @@ router.get('/:id',function(req,res){
         }
     })
 })
-
+router.get('/medicine/:id',function(req,res){
+    const {id}=req.params
+    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.photo,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id ,medicine.composition,medicine.category,medicine.company,medicine.unit,category.name AS category_name,stock.stock,stock.balance FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy JOIN category ON category.id=medicine.category  WHERE stock.medicine=?',[id],function(err,result){
+        if (err) {
+            res.status(400).json({ message: 'server problem'})
+        }
+        else{
+            if (result.length>=0) {
+                let data = {
+                    id:result[0].id,
+                    stock:result[0].stock,
+                    balance:result[0].balance,
+                   
+                 medicine:{
+                     id:result[0].medicine_id,
+                     medicine_name:result[0].medicine_name,
+                     price:result[0].price,
+                     photo:result[0].photo
+                 },
+                 category:{
+                     id:result[0].category,
+                     name:result[0].category_name,
+                 },
+                 pharmacy:{
+                     id:result[0].pharmacy_id,
+                     name:result[0].pharmacy
+                 }  
+               }
+               res.status(200).send(data)
+           
+           }
+           else{
+               res.status(200).send(result)
+           }
+        }
+    })
+})
 router.delete('/delete/:id',function(req,res){
     const {id}=req.params
     db.query('delete from stock where id=?',[id],function(err,result){

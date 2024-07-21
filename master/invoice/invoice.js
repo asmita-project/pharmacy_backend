@@ -111,12 +111,12 @@ const stockdata =  (Values) => {
                 db.query('update stock set balance=? where id=?', [item.stock-item.qty,item.stock_id], function (err, result3) {
                     if (err) {
                         console.log(err)
-                        console.log("datttt.")
+                       
                         
                         // throw err
                     }
                     else {
-                        console.log("datttt.")
+                       
                         console.log("data stock updated", result3)
                     }
                 })
