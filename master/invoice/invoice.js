@@ -35,16 +35,16 @@ const validateRequest = (req, res, next) => {
 
 router.post('/', tokenverify, (req, res) => {
 
-    const { grandtotal, orders } = req.body
+    const { grandtotal,customer, orders } = req.body
 
-    db.query('INSERT INTO order_table(grand_total)VALUES(?)', [grandtotal], async function (err, result1) {
+    db.query('INSERT INTO order_table(grand_total,customer)VALUES(?,?)', [grandtotal,customer], async function (err, result1) {
         if (err) {
             res.status(400).json({ message: err.sqlMessage })
         }
         else {
             const orderid = result1.insertId
             orders.map((item) => {
-                db.query('INSERT INTO suborder(medicine,qty,medicine_price,total,category,order_id,phamacy_id)VALUES(?,?,?,?,?,?,?)', [item.medicine, item.qty, item.medicine_price, item.total, item.category, orderid, item.pharmacy], async function (err, result) {
+                db.query('INSERT INTO suborder(medicine,qty,medicine_price,total,category,order_id,phamacy_id,subcategory,medicine_name)VALUES(?,?,?,?,?,?,?,?,?)', [item.medicine, item.qty, item.medicine_price, item.total, item.category, orderid, item.pharmacy,item.subcategory,item.medicine_name], async function (err, result) {
                     if (err) {
                         console.log(err)
                         res.end()
@@ -57,7 +57,8 @@ router.post('/', tokenverify, (req, res) => {
                         db.query('select suborder.medicine,suborder.qty,suborder.medicine_price,suborder.total,suborder.category,suborder.phamacy_id,order_table.grand_total from suborder JOIN order_table ON suborder.order_id=order_table.id WHERE suborder.order_id=?', [orderid], function (er, resultO) {
                             if (er) {
                                 console.log(er)
-                                res.end()
+                                 res.status(400).send({message:er.sqlMessage})
+                              
                                 
                             }
                             else {
@@ -88,19 +89,6 @@ const ordernew = (orderid, Values) => {
 
 }
 const stockdata =  (Values) => {
-  
-    // const medicinevalue = Values.map((item) => {
-    //     return {
-    //         medicine: [
-    //             item.medicine
-
-    //         ],
-    //         pharmacy: [
-    //             item.pharmacy
-    //         ]
-    //     }
-    // })
-
     db.query('SELECT stock.id AS stock_id,stock.stock,stock.balance,suborder.qty,suborder.medicine AS medicine_id ,suborder.phamacy_id FROM stock JOIN suborder ON suborder.medicine = stock.medicine WHERE suborder.medicine IN(?) AND suborder.phamacy_id IN(?)', [Values.medicine,Values.pharmacy],function (err, result2) {
         if (err) {
             console.log('err',err)
@@ -125,28 +113,44 @@ const stockdata =  (Values) => {
         }
     })
 }
+router.get('/order',function(req,res){
+    db.query('select * from order_table',function(err,result){
+        if (err) {
+            throw err
+        }
+        else{
+            res.status(200).send(result)
+        }
+    })
+})
 router.get('/', function (req, res) {
-    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id FROM stock JOIN medicine ON stock.medicine = medicine.id', function (err, result) {
+    db.query('SELECT suborder.id,suborder.medicine,suborder.qty,suborder.medicine_price,suborder.total,suborder.category,suborder.subcategory,suborder.phamacy_id,order_table.grand_total,order_table.id AS grand_id FROM suborder JOIN order_table ON suborder.order_id = order_table.id', function (err, result) {
         if (err) {
             res.status(400).json({ message: 'server problem' })
         }
         else {
             if (result.length >= 0) {
+                 
                 const DataList = []
-                for (let i of result) {
-                    let data = {
-                        id: i.id,
-                        stock: i.stock,
-                        balance: i.balance,
-
-                        medicine: {
-                            id: i.medicine_id,
-                            medicine_name: i.medicine_name,
-                            price: i.price
-                        }
+                 for(let i of result){
+                    let data ={
+                        orders:{
+                            id:i.id,
+                            medicine_name:i.medicine_name,
+                            category:i.category,
+                            subcategory:i.subcategory,
+                            price:i.medicine_price,
+                            qty:i.qty,
+                            pharmacy:i.phamacy_id,
+                            total:i.total
+                        },
+                        id:i.grand_id,
+                        grandtotal:i.grand_total
                     }
                     DataList.push(data)
-                }
+                 }
+             
+
                 res.status(200).send(DataList)
 
             }

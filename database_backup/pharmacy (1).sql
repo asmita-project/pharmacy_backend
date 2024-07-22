@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2024 at 08:21 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Generation Time: Jul 22, 2024 at 03:21 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +34,7 @@ CREATE TABLE `admin` (
   `phone` varchar(10) NOT NULL,
   `photo` varchar(50) NOT NULL,
   `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admin`
@@ -53,7 +53,7 @@ CREATE TABLE `category` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `category`
@@ -77,7 +77,7 @@ CREATE TABLE `company` (
   `category` int(100) DEFAULT NULL,
   `subcategory` int(100) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `company`
@@ -106,7 +106,7 @@ CREATE TABLE `composition` (
   `subcategory` varchar(11) DEFAULT NULL,
   `company` varchar(11) DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `composition`
@@ -115,7 +115,8 @@ CREATE TABLE `composition` (
 INSERT INTO `composition` (`id`, `name`, `category`, `subcategory`, `company`, `photo`) VALUES
 (1, 'composition 1', '1', '5', '5', 'composition_1720680778660.png'),
 (2, 'composition 2', '1', '4', '4', 'composition_1720680868917.png'),
-(3, 'Composition', '1', '4', '4', 'composition_1721199790673.jpeg');
+(3, 'Composition', '1', '4', '4', 'composition_1721199790673.jpeg'),
+(4, 'xyz', '', '', '', 'composition_1721639812968.png');
 
 -- --------------------------------------------------------
 
@@ -129,14 +130,15 @@ CREATE TABLE `description` (
   `medicine` varchar(200) NOT NULL,
   `take` varchar(200) NOT NULL,
   `description` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `description`
 --
 
 INSERT INTO `description` (`id`, `category`, `medicine`, `take`, `description`) VALUES
-(1, '1', 'nice', 'before lunch', 7);
+(1, '1', 'nice', 'before lunch', 7),
+(2, '1', 'ARTESUNATE injectable', 'fddfg', 8);
 
 -- --------------------------------------------------------
 
@@ -153,7 +155,7 @@ CREATE TABLE `doctor` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `doctor`
@@ -161,7 +163,8 @@ CREATE TABLE `doctor` (
 
 INSERT INTO `doctor` (`id`, `name`, `hospital`, `address`, `phone`, `email`, `role`, `photo`) VALUES
 (4, 'Pravin Mendhe', 'P.M. Hospital', 'Kharbi Nagpur', '9579908433', 'vipin30@gmail.com', 'Doctor', ''),
-(5, 'Dr.mukesh', 'city hospital', 'manish nagar', '8987678767', 'mukesh@gmail.com', 'Doctor', '');
+(5, 'Dr.mukesh', 'city hospital', 'manish nagar', '8987678767', 'mukesh@gmail.com', 'Doctor', ''),
+(6, 'Dr. Kanika Sharma', 'New Era Hospital', 'Queta Colony Nagpur', 'cdscdd5454545', 'kanika@gmail.com', 'Doctor', '');
 
 -- --------------------------------------------------------
 
@@ -177,14 +180,15 @@ CREATE TABLE `doctor_description` (
   `phone` varchar(10) NOT NULL,
   `age` varchar(3) NOT NULL,
   `weight` varchar(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `doctor_description`
 --
 
 INSERT INTO `doctor_description` (`id`, `name`, `date`, `doctor`, `phone`, `age`, `weight`) VALUES
-(7, 'Ms.payal gupta', '2024-07-19', 5, '20', '20', '12');
+(7, 'Ms.payal gupta', '2024-07-19', 5, '20', '20', '12'),
+(8, 'Sneha', '2024-07-22', 6, '1254545484', '26', '55');
 
 -- --------------------------------------------------------
 
@@ -202,7 +206,7 @@ CREATE TABLE `expire_medicine` (
   `min_stock` varchar(500) NOT NULL,
   `phar` int(11) NOT NULL,
   `pharmacy` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `expire_medicine`
@@ -227,7 +231,7 @@ CREATE TABLE `login` (
   `password` varchar(100) NOT NULL,
   `role` varchar(11) NOT NULL,
   `register` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `login`
@@ -236,7 +240,10 @@ CREATE TABLE `login` (
 INSERT INTO `login` (`id`, `username`, `password`, `role`, `register`) VALUES
 (26, 'sagar@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Pharmacy', 15),
 (27, 'admin@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Admin', 13),
-(28, 'mukesh@gmail.com', '$2a$10$ZPVo9dyfqlbHKJCe9fQZwekF6mqAt1On7j/JnUgRV6f2XwdXuEIlO', 'Doctor', 5);
+(28, 'mukesh@gmail.com', '$2a$10$ZPVo9dyfqlbHKJCe9fQZwekF6mqAt1On7j/JnUgRV6f2XwdXuEIlO', 'Doctor', 5),
+(30, 'apex@gmail.com', '$2a$10$YN.GG3LL6SU/jXY528ECO.4ML1j1YYC02rGquEN5MHNAHTGgtHh.6', 'Pharmacy', 17),
+(31, 'fddf@gmail.com', '$2a$10$7OY.6wJuGJxkFfQ11VMHbeS4PGnRoTynuPtXWWgJy7YzKDkDX/alO', 'Pharmacy', 18),
+(32, 'kanika@gmail.com', '$2a$10$VpS4uLUx86QOEdR1w.8lverj9MKGRKp6mIhSY79apXmiES7TfsJKi', 'Doctor', 6);
 
 -- --------------------------------------------------------
 
@@ -256,7 +263,7 @@ CREATE TABLE `medicine` (
   `Manufacturing` date DEFAULT NULL,
   `expiry` date DEFAULT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `medicine`
@@ -275,8 +282,16 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 
 CREATE TABLE `order_table` (
   `id` int(11) NOT NULL,
-  `grand_total` varchar(1000) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `grand_total` varchar(1000) NOT NULL,
+  `customer` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `order_table`
+--
+
+INSERT INTO `order_table` (`id`, `grand_total`, `customer`) VALUES
+(94, '55', 'sarangi bhujage');
 
 -- --------------------------------------------------------
 
@@ -293,14 +308,16 @@ CREATE TABLE `pharmacy` (
   `email` varchar(100) NOT NULL,
   `role` varchar(50) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `pharmacy`
 --
 
 INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `role`, `photo`) VALUES
-(15, 'sagar pharmacy', 'nayan mishra', 'manish nagar', '7410560033', 'sagar@gmail.com', 'Pharmacy', '');
+(15, 'sagar pharmacy', 'nayan mishra', 'manish nagar', '7410560033', 'sagar@gmail.com', 'Pharmacy', ''),
+(17, 'Apex Medicose1', 'Hemal ', 'Chhapru Square-09', '74102563521', 'apex@gmail.com', 'Pharmacy', ''),
+(18, 'cffffffff', 'vffd', 'fdfdf', '15656656656251515515155', 'fddf@gmail.com', 'Pharmacy', '');
 
 -- --------------------------------------------------------
 
@@ -311,7 +328,7 @@ INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `rol
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `role` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `role`
@@ -337,16 +354,17 @@ CREATE TABLE `stock` (
   `expire` date DEFAULT NULL,
   `batch` varchar(200) NOT NULL,
   `min_stock` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stock`
 --
 
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
-(23, 3, '100', '100', '15', '2024-09-25', 'B', '10'),
-(24, 1, '100', '100', '15', '2024-09-21', 'B', '10'),
-(25, 2, '100', '100', '15', '2024-10-21', 'B', '10');
+(23, 3, '100', '98', '15', '2024-09-25', 'B', '10'),
+(24, 1, '100', '98', '15', '2024-09-21', 'B', '10'),
+(25, 2, '100', '100', '15', '2024-10-21', 'B', '10'),
+(26, 2, '100', '10', '17', '2025-07-01', 'B458IA', '10');
 
 -- --------------------------------------------------------
 
@@ -359,7 +377,7 @@ CREATE TABLE `subcategory` (
   `name` varchar(100) NOT NULL,
   `category` int(100) NOT NULL,
   `photo` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `subcategory`
@@ -368,7 +386,7 @@ CREATE TABLE `subcategory` (
 INSERT INTO `subcategory` (`id`, `name`, `category`, `photo`) VALUES
 (4, 'ACETAMINOPHEN injectable', 1, 'subcategory_1720680410195.png'),
 (5, 'ADRENALINE injectable', 1, 'subcategory_1720680494976.png'),
-(6, 'Burns', 5, 'subcategory_1721199206638.jpeg'),
+(6, 'Burn Heal ', 5, 'subcategory_1721638529204.jpeg'),
 (7, 'Fever', 2, 'subcategory_1721206391702.jpeg');
 
 -- --------------------------------------------------------
@@ -384,10 +402,20 @@ CREATE TABLE `suborder` (
   `qty` varchar(500) NOT NULL,
   `medicine_price` varchar(500) NOT NULL,
   `total` varchar(500) NOT NULL,
-  `category` int(11) NOT NULL,
+  `category` varchar(200) DEFAULT NULL,
   `order_id` varchar(300) NOT NULL,
-  `phamacy_id` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `phamacy_id` varchar(200) NOT NULL,
+  `subcategory` varchar(200) DEFAULT NULL,
+  `medicine_name` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `suborder`
+--
+
+INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`, `subcategory`, `medicine_name`) VALUES
+(87, 3, '0000-00-00', '2', '7.50', '15', 'injection', '94', '15', 'ACETAMINOPHEN injectable', 'Disprin'),
+(88, 1, '0000-00-00', '2', '20', '40', 'injection', '94', '15', 'ACETAMINOPHEN injectable', 'nice');
 
 -- --------------------------------------------------------
 
@@ -402,7 +430,7 @@ CREATE TABLE `units` (
   `subcategory` varchar(11) DEFAULT NULL,
   `company` int(11) DEFAULT NULL,
   `composition` varchar(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `units`
@@ -427,7 +455,7 @@ CREATE TABLE `variant` (
   `subcategory` int(11) NOT NULL,
   `company` int(11) NOT NULL,
   `photo` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -572,31 +600,31 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `composition`
 --
 ALTER TABLE `composition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `description`
 --
 ALTER TABLE `description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `doctor`
 --
 ALTER TABLE `doctor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `doctor_description`
 --
 ALTER TABLE `doctor_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `expire_medicine`
@@ -608,7 +636,7 @@ ALTER TABLE `expire_medicine`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `medicine`
@@ -620,13 +648,13 @@ ALTER TABLE `medicine`
 -- AUTO_INCREMENT for table `order_table`
 --
 ALTER TABLE `order_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
 --
 ALTER TABLE `pharmacy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -638,7 +666,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
@@ -650,7 +678,7 @@ ALTER TABLE `subcategory`
 -- AUTO_INCREMENT for table `suborder`
 --
 ALTER TABLE `suborder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -686,12 +714,6 @@ ALTER TABLE `doctor_description`
 ALTER TABLE `expire_medicine`
   ADD CONSTRAINT `expire_medicine_ibfk_1` FOREIGN KEY (`medicine`) REFERENCES `medicine` (`id`),
   ADD CONSTRAINT `expire_medicine_ibfk_2` FOREIGN KEY (`pharmacy`) REFERENCES `pharmacy` (`id`);
-
---
--- Constraints for table `suborder`
---
-ALTER TABLE `suborder`
-  ADD CONSTRAINT `suborder_ibfk_2` FOREIGN KEY (`category`) REFERENCES `category` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

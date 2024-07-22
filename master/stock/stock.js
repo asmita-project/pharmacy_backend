@@ -275,7 +275,7 @@ router.get('/:id',function(req,res){
 })
 router.get('/medicine/:id',function(req,res){
     const {id}=req.params
-    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.photo,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id ,medicine.composition,medicine.category,medicine.company,medicine.unit,category.name AS category_name,stock.stock,stock.balance FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy JOIN category ON category.id=medicine.category  WHERE stock.medicine=?',[id],function(err,result){
+    db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.photo,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id ,subcategory.id AS subcat_id,subcategory.name AS subcate_name,medicine.composition,medicine.category,medicine.company,medicine.unit,category.name AS category_name,stock.stock,stock.balance FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy JOIN category ON category.id=medicine.category JOIN subcategory ON subcategory.id=medicine.subcategory  WHERE stock.medicine=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})
         }
@@ -295,6 +295,10 @@ router.get('/medicine/:id',function(req,res){
                  category:{
                      id:result[0].category,
                      name:result[0].category_name,
+                 },
+                 subcategory:{
+                    id:result[0].subcat_id,
+                    name:result[0].subcate_name
                  },
                  pharmacy:{
                      id:result[0].pharmacy_id,
