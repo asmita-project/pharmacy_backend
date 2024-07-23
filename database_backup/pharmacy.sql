@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2024 at 03:21 PM
+-- Generation Time: Jul 23, 2024 at 03:09 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -132,14 +132,6 @@ CREATE TABLE `description` (
   `description` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `description`
---
-
-INSERT INTO `description` (`id`, `category`, `medicine`, `take`, `description`) VALUES
-(1, '1', 'nice', 'before lunch', 7),
-(2, '1', 'ARTESUNATE injectable', 'fddfg', 8);
-
 -- --------------------------------------------------------
 
 --
@@ -182,14 +174,6 @@ CREATE TABLE `doctor_description` (
   `weight` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `doctor_description`
---
-
-INSERT INTO `doctor_description` (`id`, `name`, `date`, `doctor`, `phone`, `age`, `weight`) VALUES
-(7, 'Ms.payal gupta', '2024-07-19', 5, '20', '20', '12'),
-(8, 'Sneha', '2024-07-22', 6, '1254545484', '26', '55');
-
 -- --------------------------------------------------------
 
 --
@@ -207,17 +191,6 @@ CREATE TABLE `expire_medicine` (
   `phar` int(11) NOT NULL,
   `pharmacy` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `expire_medicine`
---
-
-INSERT INTO `expire_medicine` (`id`, `medicine`, `stock`, `balance`, `expire`, `batch`, `min_stock`, `phar`, `pharmacy`) VALUES
-(9, 1, '100', '100', '2024-07-19', 'A', '10', 0, 15),
-(10, 3, '100', '100', '2024-06-30', 'B', '10', 0, 15),
-(11, 2, '40', '40', '2024-07-20', 'B', '10', 0, 15),
-(12, 2, '100', '100', '2024-07-20', 'A', '10', 0, 15),
-(13, 3, '100', '100', '2024-07-21', 'A', '10', 0, 15);
 
 -- --------------------------------------------------------
 
@@ -238,12 +211,8 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `username`, `password`, `role`, `register`) VALUES
-(26, 'sagar@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Pharmacy', 15),
 (27, 'admin@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Admin', 13),
-(28, 'mukesh@gmail.com', '$2a$10$ZPVo9dyfqlbHKJCe9fQZwekF6mqAt1On7j/JnUgRV6f2XwdXuEIlO', 'Doctor', 5),
-(30, 'apex@gmail.com', '$2a$10$YN.GG3LL6SU/jXY528ECO.4ML1j1YYC02rGquEN5MHNAHTGgtHh.6', 'Pharmacy', 17),
-(31, 'fddf@gmail.com', '$2a$10$7OY.6wJuGJxkFfQ11VMHbeS4PGnRoTynuPtXWWgJy7YzKDkDX/alO', 'Pharmacy', 18),
-(32, 'kanika@gmail.com', '$2a$10$VpS4uLUx86QOEdR1w.8lverj9MKGRKp6mIhSY79apXmiES7TfsJKi', 'Doctor', 6);
+(34, 'sagar@gmail.com', '$2a$10$l0W1oFP8I9XLetbGRfUgberU3iPJ9YJrMFlwaljvj1IwyPsJg.FsK', 'Pharmacy', 20);
 
 -- --------------------------------------------------------
 
@@ -270,9 +239,8 @@ CREATE TABLE `medicine` (
 --
 
 INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, `company`, `unit`, `price`, `Manufacturing`, `expiry`, `photo`) VALUES
-(1, 'nice', 1, 4, '', '', '', '20', '2024-07-10', '2024-08-10', 'medicine_1720695978320.jpg'),
-(2, 'ARTESUNATE injectable', 1, 4, '', '', '', '200', '2024-07-12', '2024-08-12', 'medicine_1720775913874.jpg'),
-(3, 'Disprin', 1, 4, '', '', '', '7.50', '2024-07-11', '2025-07-11', 'medicine_1721206907341.jpeg');
+(5, 'Dolo 650mg Strip Of 15', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737051978.webp'),
+(6, 'Crocin 650', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737361948.webp');
 
 -- --------------------------------------------------------
 
@@ -283,15 +251,16 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 CREATE TABLE `order_table` (
   `id` int(11) NOT NULL,
   `grand_total` varchar(1000) NOT NULL,
-  `customer` varchar(200) DEFAULT NULL
+  `customer` varchar(200) DEFAULT NULL,
+  `date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_table`
 --
 
-INSERT INTO `order_table` (`id`, `grand_total`, `customer`) VALUES
-(94, '55', 'sarangi bhujage');
+INSERT INTO `order_table` (`id`, `grand_total`, `customer`, `date`) VALUES
+(97, '60', 'sarangi bhujage', '2024-07-23 18:36:34');
 
 -- --------------------------------------------------------
 
@@ -315,9 +284,7 @@ CREATE TABLE `pharmacy` (
 --
 
 INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `role`, `photo`) VALUES
-(15, 'sagar pharmacy', 'nayan mishra', 'manish nagar', '7410560033', 'sagar@gmail.com', 'Pharmacy', ''),
-(17, 'Apex Medicose1', 'Hemal ', 'Chhapru Square-09', '74102563521', 'apex@gmail.com', 'Pharmacy', ''),
-(18, 'cffffffff', 'vffd', 'fdfdf', '15656656656251515515155', 'fddf@gmail.com', 'Pharmacy', '');
+(20, 'sagar pharmacy', 'manoj khan', 'rameshwari nagpur', '8987676567', 'sagar@gmail.com', 'Pharmacy', '');
 
 -- --------------------------------------------------------
 
@@ -361,10 +328,8 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
-(23, 3, '100', '98', '15', '2024-09-25', 'B', '10'),
-(24, 1, '100', '98', '15', '2024-09-21', 'B', '10'),
-(25, 2, '100', '100', '15', '2024-10-21', 'B', '10'),
-(26, 2, '100', '10', '17', '2025-07-01', 'B458IA', '10');
+(27, 5, '100', '99', '20', '2024-09-23', 'A', '10'),
+(28, 6, '20', '18', '20', '2024-09-23', 'A', '10');
 
 -- --------------------------------------------------------
 
@@ -384,10 +349,7 @@ CREATE TABLE `subcategory` (
 --
 
 INSERT INTO `subcategory` (`id`, `name`, `category`, `photo`) VALUES
-(4, 'ACETAMINOPHEN injectable', 1, 'subcategory_1720680410195.png'),
-(5, 'ADRENALINE injectable', 1, 'subcategory_1720680494976.png'),
-(6, 'Burn Heal ', 5, 'subcategory_1721638529204.jpeg'),
-(7, 'Fever', 2, 'subcategory_1721206391702.jpeg');
+(8, 'Dolo', 2, 'subcategory_1721730428198.webp');
 
 -- --------------------------------------------------------
 
@@ -406,16 +368,17 @@ CREATE TABLE `suborder` (
   `order_id` varchar(300) NOT NULL,
   `phamacy_id` varchar(200) NOT NULL,
   `subcategory` varchar(200) DEFAULT NULL,
-  `medicine_name` varchar(200) DEFAULT NULL
+  `medicine_name` varchar(200) DEFAULT NULL,
+  `batch` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `suborder`
 --
 
-INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`, `subcategory`, `medicine_name`) VALUES
-(87, 3, '0000-00-00', '2', '7.50', '15', 'injection', '94', '15', 'ACETAMINOPHEN injectable', 'Disprin'),
-(88, 1, '0000-00-00', '2', '20', '40', 'injection', '94', '15', 'ACETAMINOPHEN injectable', 'nice');
+INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`, `subcategory`, `medicine_name`, `batch`) VALUES
+(91, 5, '0000-00-00', '1', '20', '20', 'tablet', '97', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'A'),
+(92, 6, '0000-00-00', '2', '20', '40', 'tablet', '97', '20', 'Dolo', 'Crocin 650', 'A');
 
 -- --------------------------------------------------------
 
@@ -437,10 +400,7 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `name`, `category`, `subcategory`, `company`, `composition`) VALUES
-(1, 'strips', '1', '4', 4, '2'),
-(2, 'PCS', '1', '4', 4, '2'),
-(4, 'ml1', '1', '5', 4, '2'),
-(5, 'pcs1', '1', '5', 5, '1');
+(6, 'Strip', '', '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -636,25 +596,25 @@ ALTER TABLE `expire_medicine`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `order_table`
 --
 ALTER TABLE `order_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
 --
 ALTER TABLE `pharmacy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -666,25 +626,25 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `suborder`
 --
 ALTER TABLE `suborder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT for table `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `variant`

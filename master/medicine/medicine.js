@@ -17,7 +17,7 @@ const secretKey = 'pharmacy_key';
 
 // Utility function to check if a value is a non-empty string
 const isNonEmptyString = (value) => {
-    return typeof value === 'string' && value.trim() !== '';
+    return (typeof value === 'string' || typeof value === 'number') && value.trim() !== '';
 };
 
 const isPositiveInteger = (value) => {
@@ -49,15 +49,15 @@ const upload = multer({storage
     // }
 })
 
-router.post('/',upload.single('medicine'),validateRequest,tokenverify,(req, res) => {
+router.post('/',tokenverify,upload.single('medicine'),(req, res) => {
     const { name,category,subcategory,composition,company,unit,price} = req.body;
     const file = req.file;
     if (!file) {
         return res.status(400).send('No file uploaded.');
       }
-    db.query('INSERT INTO medicine(name,category,subcategory,company,composition,unit,price,photo)VALUES(?,?,?,?,?,?,?,?,)',[name,category,subcategory,company,composition,unit,price,file.filename], function (err, result) {
+    db.query('INSERT INTO medicine(name,category,subcategory,company,composition,unit,price,photo)VALUES(?,?,?,?,?,?,?,?)',[name,category,subcategory,company,composition,unit,price,file.filename], function (err, result) {
         if (err) {
-            console.error(err)
+            console.log(err)
             res.status(400).json({ message: 'Server Problem' })
         }
         else {
