@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2024 at 03:09 PM
+-- Generation Time: Jul 24, 2024 at 03:10 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -260,7 +260,8 @@ CREATE TABLE `order_table` (
 --
 
 INSERT INTO `order_table` (`id`, `grand_total`, `customer`, `date`) VALUES
-(97, '60', 'sarangi bhujage', '2024-07-23 18:36:34');
+(97, '60', 'sarangi bhujage', '2024-07-23 18:36:34'),
+(98, '80', 'payal jivne', '2024-07-24 17:42:18');
 
 -- --------------------------------------------------------
 
@@ -328,8 +329,9 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
-(27, 5, '100', '99', '20', '2024-09-23', 'A', '10'),
-(28, 6, '20', '18', '20', '2024-09-23', 'A', '10');
+(27, 5, '100', '96', '20', '2024-09-21', 'A', '10'),
+(28, 6, '20', '18', '20', '2024-09-23', 'A', '10'),
+(29, 5, '5', '1', '20', '2024-09-24', 'B', '4');
 
 -- --------------------------------------------------------
 
@@ -378,7 +380,8 @@ CREATE TABLE `suborder` (
 
 INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`, `subcategory`, `medicine_name`, `batch`) VALUES
 (91, 5, '0000-00-00', '1', '20', '20', 'tablet', '97', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'A'),
-(92, 6, '0000-00-00', '2', '20', '40', 'tablet', '97', '20', 'Dolo', 'Crocin 650', 'A');
+(92, 6, '0000-00-00', '2', '20', '40', 'tablet', '97', '20', 'Dolo', 'Crocin 650', 'A'),
+(93, 5, '0000-00-00', '4', '20', '80', 'tablet', '98', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'B');
 
 -- --------------------------------------------------------
 
@@ -608,7 +611,7 @@ ALTER TABLE `medicine`
 -- AUTO_INCREMENT for table `order_table`
 --
 ALTER TABLE `order_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
@@ -626,7 +629,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
@@ -638,7 +641,7 @@ ALTER TABLE `subcategory`
 -- AUTO_INCREMENT for table `suborder`
 --
 ALTER TABLE `suborder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `units`
