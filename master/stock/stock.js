@@ -107,7 +107,7 @@ router.get('/', function (req, res) {
                                     }
                                     else {
                                         console.log('delete data ' + entry.id)
-                                        db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id,stock.balance,stock.batch,stock.expire,stock.min_stock,medicine.photo FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy', function (err, result) {
+                                        db.query('SELECT stock.id,SUM(stock.stock) AS stock ,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id,SUM(stock.balance) AS balance,stock.batch,stock.expire,SUM(stock.min_stock) AS min_stock,medicine.photo FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy GROUP BY stock.medicine', function (err, result) {
                                             if (err) {
                                                 throw err
 
@@ -155,7 +155,7 @@ router.get('/', function (req, res) {
                 })
             }
             else {
-                db.query('SELECT stock.id,stock.stock,stock.balance,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id,stock.balance,stock.batch,stock.expire,stock.min_stock,medicine.photo FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy', function (err, result) {
+                db.query('SELECT stock.id,SUM(stock.stock) AS stock ,medicine.name AS medicine_name,medicine.price,medicine.id AS medicine_id,pharmacy.name AS pharmacy,pharmacy.id AS pharmacy_id,SUM(stock.balance) AS balance,stock.batch,stock.expire,SUM(stock.min_stock) AS min_stock,medicine.photo FROM stock JOIN medicine ON stock.medicine = medicine.id JOIN pharmacy ON pharmacy.id = stock.pharmacy GROUP BY stock.medicine', function (err, result) {
                     if (err) {
                         res.status(400).json({ message: 'server problem' })
                     }

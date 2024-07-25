@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2024 at 03:10 PM
+-- Generation Time: Jul 25, 2024 at 03:24 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -63,7 +63,8 @@ INSERT INTO `category` (`id`, `name`, `photo`) VALUES
 (1, 'injection', 'category_1720585814291.png'),
 (2, 'tablet', 'category_1720605150038.png'),
 (4, 'Saline Solution', 'category_1721197532614.jpg'),
-(5, 'First Aid', 'category_1721198389380.jpeg');
+(5, 'First Aid', 'category_1721198389380.jpeg'),
+(6, 'Syrup', 'category_1721883912856.jpeg');
 
 -- --------------------------------------------------------
 
@@ -91,7 +92,8 @@ INSERT INTO `company` (`id`, `name`, `category`, `subcategory`, `photo`) VALUES
 (11, 'Company3', 1, 5, 'company_1721200643967.jpeg'),
 (12, 'company5', 2, 7, 'company_1721206440055.jpeg'),
 (13, 'ZOXIL S Pvt Ltd', 2, 7, 'company_1721209976440.jpg'),
-(14, 'abcs', 0, 0, 'company_1721365267031.webp');
+(14, 'abcs', 0, 0, 'company_1721365267031.webp'),
+(16, 'Syna Pharma', 0, 0, 'company_1721885354274.png');
 
 -- --------------------------------------------------------
 
@@ -116,7 +118,8 @@ INSERT INTO `composition` (`id`, `name`, `category`, `subcategory`, `company`, `
 (1, 'composition 1', '1', '5', '5', 'composition_1720680778660.png'),
 (2, 'composition 2', '1', '4', '4', 'composition_1720680868917.png'),
 (3, 'Composition', '1', '4', '4', 'composition_1721199790673.jpeg'),
-(4, 'xyz', '', '', '', 'composition_1721639812968.png');
+(4, 'xyz', '', '', '', 'composition_1721639812968.png'),
+(5, 'abc1', '', '', '', 'composition_1721886993707.jpeg');
 
 -- --------------------------------------------------------
 
@@ -129,7 +132,31 @@ CREATE TABLE `description` (
   `category` varchar(200) NOT NULL,
   `medicine` varchar(200) NOT NULL,
   `take` varchar(200) NOT NULL,
-  `description` int(11) DEFAULT NULL
+  `description` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `description`
+--
+
+INSERT INTO `description` (`id`, `category`, `medicine`, `take`, `description`, `date`) VALUES
+(3, '2', 'Dolo 650mg Strip Of 15', 'before lunch', 9, '2024-07-25'),
+(4, '2', 'Dolo 650mg Strip Of 15', 'before dinner', 9, '2024-07-24'),
+(6, '2', 'Crocin 650', 'abc', 9, '2024-07-24'),
+(8, '2', 'Dolo 650mg Strip Of 15', 'After Lunch', 10, '2024-07-25'),
+(9, '6', 'Benadryl', 'After Lunch', 11, '2024-07-25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `description_details`
+--
+
+CREATE TABLE `description_details` (
+  `id` int(11) NOT NULL,
+  `description_id` int(11) NOT NULL,
+  `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -156,7 +183,9 @@ CREATE TABLE `doctor` (
 INSERT INTO `doctor` (`id`, `name`, `hospital`, `address`, `phone`, `email`, `role`, `photo`) VALUES
 (4, 'Pravin Mendhe', 'P.M. Hospital', 'Kharbi Nagpur', '9579908433', 'vipin30@gmail.com', 'Doctor', ''),
 (5, 'Dr.mukesh', 'city hospital', 'manish nagar', '8987678767', 'mukesh@gmail.com', 'Doctor', ''),
-(6, 'Dr. Kanika Sharma', 'New Era Hospital', 'Queta Colony Nagpur', 'cdscdd5454545', 'kanika@gmail.com', 'Doctor', '');
+(6, 'Dr. Kanika Sharma', 'New Era Hospital', 'Queta Colony Nagpur', 'cdscdd5454545', 'kanika@gmail.com', 'Doctor', ''),
+(7, 'Dr.patil', 'naik hospital', 'manish nagar', '89876765678', 'patil@gmail.com', 'Doctor', ''),
+(9, 'Dr. Sandesh ', 'Khobragade Clinic', 'Vyankatesh Nagar , Kdk college road nagpur', '7410325896', 'sandesh@gmail.com', 'Doctor', '');
 
 -- --------------------------------------------------------
 
@@ -173,6 +202,15 @@ CREATE TABLE `doctor_description` (
   `age` varchar(3) NOT NULL,
   `weight` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `doctor_description`
+--
+
+INSERT INTO `doctor_description` (`id`, `name`, `date`, `doctor`, `phone`, `age`, `weight`) VALUES
+(9, 'pooja tiwari', '2024-07-25', 7, '7876566765', '20', '50'),
+(10, 'Sandhya', '2024-07-25', 9, '8987676567', '26', '55'),
+(11, 'Smita Paunikar', '2024-07-25', 9, '8987676567', '30', '60');
 
 -- --------------------------------------------------------
 
@@ -212,7 +250,10 @@ CREATE TABLE `login` (
 
 INSERT INTO `login` (`id`, `username`, `password`, `role`, `register`) VALUES
 (27, 'admin@gmail.com', '$2a$10$szAK6DXkEFy41DMu2NPd1.0qDvIicWDCotVjLAgAmQDIEVk0vt7p2', 'Admin', 13),
-(34, 'sagar@gmail.com', '$2a$10$l0W1oFP8I9XLetbGRfUgberU3iPJ9YJrMFlwaljvj1IwyPsJg.FsK', 'Pharmacy', 20);
+(34, 'sagar@gmail.com', '$2a$10$l0W1oFP8I9XLetbGRfUgberU3iPJ9YJrMFlwaljvj1IwyPsJg.FsK', 'Pharmacy', 20),
+(35, 'patil@gmail.com', '$2a$10$DfLzvvcC1OWu2TKpkCINZ.YPMa988VY.cD/N8Z6Tzw0lEZpfN5W0K', 'Doctor', 7),
+(36, 'param@gmail.com', '$2a$10$dvW5WWpc2A7v2EIwL/Stcel07Pqqm8svAaIjo6hSCKtsgyCLVXAG2', 'Pharmacy', 21),
+(38, 'sandesh@gmail.com', '$2a$10$wOWqnxsbztv2BI2SwOIMV.AggCzVko0KNmXa.Y5skhMKMUMwDGML.', 'Doctor', 9);
 
 -- --------------------------------------------------------
 
@@ -240,7 +281,9 @@ CREATE TABLE `medicine` (
 
 INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, `company`, `unit`, `price`, `Manufacturing`, `expiry`, `photo`) VALUES
 (5, 'Dolo 650mg Strip Of 15', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737051978.webp'),
-(6, 'Crocin 650', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737361948.webp');
+(6, 'Crocin 650', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737361948.webp'),
+(7, 'Benadryl', 6, 9, 'abc1', 'Syna Pharma', 'ml', '39.36', NULL, NULL, 'medicine_1721887958984.jpeg'),
+(10, 'Himalaya Koflet Cough Syrup 100ml', 6, 9, 'Composition', 'ZOXIL S Pvt Ltd', 'ml', '0', NULL, NULL, 'medicine_1721902495122.jpg');
 
 -- --------------------------------------------------------
 
@@ -261,7 +304,9 @@ CREATE TABLE `order_table` (
 
 INSERT INTO `order_table` (`id`, `grand_total`, `customer`, `date`) VALUES
 (97, '60', 'sarangi bhujage', '2024-07-23 18:36:34'),
-(98, '80', 'payal jivne', '2024-07-24 17:42:18');
+(98, '80', 'payal jivne', '2024-07-24 17:42:18'),
+(99, '393.6', 'Raj ', '2024-07-25 11:53:46'),
+(100, '1968', 'Prakash', '2024-07-25 12:46:58');
 
 -- --------------------------------------------------------
 
@@ -285,7 +330,8 @@ CREATE TABLE `pharmacy` (
 --
 
 INSERT INTO `pharmacy` (`id`, `name`, `owner`, `address`, `phone`, `email`, `role`, `photo`) VALUES
-(20, 'sagar pharmacy', 'manoj khan', 'rameshwari nagpur', '8987676567', 'sagar@gmail.com', 'Pharmacy', '');
+(20, 'sagar pharmacy', 'manoj khan', 'rameshwari nagpur', '8987676567', 'sagar@gmail.com', 'Pharmacy', ''),
+(21, 'Param Medicose', 'Prakash Sonkusre', 'Telephone Exchange Square Nagpur', '7452369882', 'param@gmail.com', 'Pharmacy', '');
 
 -- --------------------------------------------------------
 
@@ -331,7 +377,8 @@ CREATE TABLE `stock` (
 INSERT INTO `stock` (`id`, `medicine`, `stock`, `balance`, `pharmacy`, `expire`, `batch`, `min_stock`) VALUES
 (27, 5, '100', '96', '20', '2024-09-21', 'A', '10'),
 (28, 6, '20', '18', '20', '2024-09-23', 'A', '10'),
-(29, 5, '5', '1', '20', '2024-09-24', 'B', '4');
+(29, 5, '5', '1', '20', '2024-09-24', 'B', '4'),
+(30, 7, '100', '50', '20', '2024-07-28', 'B4487BN', '75');
 
 -- --------------------------------------------------------
 
@@ -351,7 +398,8 @@ CREATE TABLE `subcategory` (
 --
 
 INSERT INTO `subcategory` (`id`, `name`, `category`, `photo`) VALUES
-(8, 'Dolo', 2, 'subcategory_1721730428198.webp');
+(8, 'Dolo', 2, 'subcategory_1721730428198.webp'),
+(9, 'Cough Syrup', 6, 'subcategory_1721884785202.jpeg');
 
 -- --------------------------------------------------------
 
@@ -381,7 +429,9 @@ CREATE TABLE `suborder` (
 INSERT INTO `suborder` (`id`, `medicine`, `expire`, `qty`, `medicine_price`, `total`, `category`, `order_id`, `phamacy_id`, `subcategory`, `medicine_name`, `batch`) VALUES
 (91, 5, '0000-00-00', '1', '20', '20', 'tablet', '97', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'A'),
 (92, 6, '0000-00-00', '2', '20', '40', 'tablet', '97', '20', 'Dolo', 'Crocin 650', 'A'),
-(93, 5, '0000-00-00', '4', '20', '80', 'tablet', '98', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'B');
+(93, 5, '0000-00-00', '4', '20', '80', 'tablet', '98', '20', 'Dolo', 'Dolo 650mg Strip Of 15', 'B'),
+(94, 7, '0000-00-00', '10', '39.36', '393.6', 'Syrup', '99', '20', 'Cough Syrup', 'Benadryl', 'B4487BN'),
+(95, 7, '0000-00-00', '50', '39.36', '1968', 'Syrup', '100', '20', 'Cough Syrup', 'Benadryl', 'B4487BN');
 
 -- --------------------------------------------------------
 
@@ -403,7 +453,8 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `name`, `category`, `subcategory`, `company`, `composition`) VALUES
-(6, 'Strip', '', '', 0, '');
+(6, 'Strip', '', '', 0, ''),
+(7, 'ml', '', '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -557,37 +608,37 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `composition`
 --
 ALTER TABLE `composition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `description`
 --
 ALTER TABLE `description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `doctor`
 --
 ALTER TABLE `doctor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `doctor_description`
 --
 ALTER TABLE `doctor_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `expire_medicine`
@@ -599,25 +650,25 @@ ALTER TABLE `expire_medicine`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `order_table`
 --
 ALTER TABLE `order_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `pharmacy`
 --
 ALTER TABLE `pharmacy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -629,25 +680,25 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `subcategory`
 --
 ALTER TABLE `subcategory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `suborder`
 --
 ALTER TABLE `suborder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `variant`

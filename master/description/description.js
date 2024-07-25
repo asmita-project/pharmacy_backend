@@ -47,7 +47,7 @@ router.post('/', validateRequest, tokenverify, (req, res) => {
         else{
             const id = result1.insertId
             description.map((item)=>{
-                db.query('INSERT INTO description(category,medicine,take,description)VALUES(?,?,?,?)', [item.category,item.medicine,item.take,id], function (err, result) {
+                db.query('INSERT INTO description(category,medicine,take,description,date)VALUES(?,?,?,?,?)', [item.category,item.medicine,item.take,id,date], function (err, result) {
                     if (err) {
                         console.error(err.errno)
                         res.status(400).json({ message: err.sqlMessage })
@@ -178,9 +178,20 @@ router.post('/single',function(req,res){
         }
     })
 })
-router.get('/single/:id',function(req,res){
+router.get('/single/:description',function(req,res){
+    const {description}=req.params
+    db.query('SELECT * FROM `description` WHERE description=?',[description],function(err,result){
+        if (err) {
+            throw err
+        }
+        else{
+            res.status(200).send(result)   
+        }
+    })
+})
+router.get('/description_details/:id',function(req,res){
     const {id}=req.params
-    db.query('SELECT description.id,description.medicine,description.take,description.description,category.id AS cateid,category.name AS category FROM `description` JOIN category ON category.id = description.category WHERE description=?',[id],function(err,result){
+    db.query('SELECT * FROM `description` WHERE description=? GROUP BY date',[id],function(err,result){
         if (err) {
             throw err
         }
@@ -190,23 +201,46 @@ router.get('/single/:id',function(req,res){
     })
 })
 router.post('/update', function (req, res) {
-    const { id,age,weight,name,phone } = req.body
-    db.query('update doctor_description set name=?,age=?,phone=?,weight=? where id=?', [name,age,phone,weight,id], function (err, result) {
-        if (err) {
-            res.status(400).json({ message: 'server problem' })
-        }
-        else {
-            db.query('select * from doctor_description where id=?', [id], function (err, result2) {
-                if (err) {
-                    console.error(err)
-                    res.status(400).json({ message: 'doctor_description not found' })
-                }
-                else {
-                    res.status(200).json(result2[0])
-                }
-            })
-        }
+    const { id,age,weight,name,phone,orders} = req.body
+    const date = new Date()
+    orders.map((item)=>{
+        db.query('INSERT INTO description(category,medicine,take,description,date)VALUES(?,?,?,?,?)', [item.category,item.medicine,item.take,id,date], function (err, result) {
+            if (err) {
+                console.error(err.errno)
+                res.status(400).json({ message: err.sqlMessage })
+            }
+            else {
+                db.query('update doctor_description set name=?,age=?,phone=?,weight=? where id=?', [name,age,phone,weight,id], function (err, result) {
+                    if (err) {
+                        res.status(400).json({ message: 'server problem' })
+                    }
+                    else {
+                        
+                        res.status(400).json({ message: 'updated' })
+                    }
+                })
+            }
+    
+    
+        })
+    
     })
+   
+})
+
+router.post('/Des/update', function (req, res) {
+    const {orders,id} = req.body
+    orders.map((item)=>{
+        db.query('update description set category=?,medicine=?,take=? where description=?',[item.category,item.medicine,item.take,id], function (err, result) {
+            if (err) {
+                res.status(400).json({ message: 'server problem' })
+            }
+            else {
+                  res.status(200).json({message:'updated done'})
+            }
+        })
+    })
+    
 })
 module.exports = router
 // Check if user already exists

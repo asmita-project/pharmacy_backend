@@ -165,7 +165,7 @@ router.get('/:id',function(req,res){
     })
 })
 
-router.delete('/delete/:id',tokenverify,function(req,res){
+router.delete('/delete/:id',function(req,res){
     const {id}=req.params
     db.query('delete from medicine where id=?',[id],function(err,result){
         if (err) {
