@@ -90,7 +90,7 @@ router.get('/',function(req,res){
     })
 })
 router.get('/:id',function(req,res){
-    const {id}=req.body
+    const {id}=req.params
     db.query('select * from category where id=?',[id],function(err,result){
         if (err) {
             res.status(400).json({ message: 'server problem'})

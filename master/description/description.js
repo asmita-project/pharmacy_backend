@@ -216,7 +216,7 @@ router.post('/update', function (req, res) {
                     }
                     else {
                         
-                        res.status(400).json({ message: 'updated' })
+                        res.status(200).json({ message: 'updated' })
                     }
                 })
             }
