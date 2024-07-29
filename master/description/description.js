@@ -5,7 +5,6 @@ const bodyParsor = require('body-parser')
 const bcrypt = require('bcryptjs');
 const db = require('../../database/db')
 const tokenverify = require('../../tokenverify/tokenverify');
-const { route } = require('./description');
 
 app.use(bodyParsor.json());
 app.use(bodyParsor.urlencoded({ extended: true }));

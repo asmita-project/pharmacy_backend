@@ -16,6 +16,7 @@ const medicine = require('./master/medicine/medicine')
 const stock = require('./master/stock/stock')
 const description = require('./master/description/description')
 const invoice = require('./master/invoice/invoice')
+const sendMail = require('./sendmail/sendMail');
 app.use(bodyParsor.json());
 app.use(bodyParsor.urlencoded({ extended: true }));
 app.use(cors())
@@ -39,6 +40,22 @@ app.use('/subcategoryimg',express.static('upload/subcategory'));
 app.use('/companyimg',express.static('upload/company'));
 app.use('/compositionimg',express.static('upload/composition'));
 app.use('/medicineimg',express.static('upload/medicine'));
+
+
+app.post('/send-email', async (req, res) => {
+   const { to, subject, context } = req.body;
+
+   if (!to || !subject || !context) {
+       return res.status(400).json({ error: 'Missing required fields' });
+   }
+
+   try {
+       await sendMail(to, subject, context);
+       res.status(200).json({ message: 'Email sent successfully' });
+   } catch (error) {
+       res.status(500).json({ error: 'Error sending email' });
+   }
+});
 
 app.listen(PORT,()=>{
    console.log('App Running on',PORT)

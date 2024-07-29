@@ -105,7 +105,7 @@ router.delete('/delete/:id',function(req,res){
     const {id}=req.params
     db.query('delete from category where id=?',[id],function(err,result){
         if (err) {
-            res.status(400).json({ message: 'server problem'})
+            res.status(400).json({ message:err.sqlMessage})
         }
         else{
             res.status(200).json({message:id+''+'is Deleted'})

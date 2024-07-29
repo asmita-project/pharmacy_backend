@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2024 at 03:24 PM
+-- Generation Time: Jul 26, 2024 at 02:52 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -145,7 +145,8 @@ INSERT INTO `description` (`id`, `category`, `medicine`, `take`, `description`, 
 (4, '2', 'Dolo 650mg Strip Of 15', 'before dinner', 9, '2024-07-24'),
 (6, '2', 'Crocin 650', 'abc', 9, '2024-07-24'),
 (8, '2', 'Dolo 650mg Strip Of 15', 'After Lunch', 10, '2024-07-25'),
-(9, '6', 'Benadryl', 'After Lunch', 11, '2024-07-25');
+(9, '6', 'Benadryl', 'After Lunch', 11, '2024-07-25'),
+(10, 'tablet', 'Dolo 650mg Strip Of 15', 'before lunch', 10, '2024-07-26');
 
 -- --------------------------------------------------------
 
@@ -283,7 +284,8 @@ INSERT INTO `medicine` (`id`, `name`, `category`, `subcategory`, `composition`, 
 (5, 'Dolo 650mg Strip Of 15', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737051978.webp'),
 (6, 'Crocin 650', 2, 8, '', '', 'Strip', '20', NULL, NULL, 'medicine_1721737361948.webp'),
 (7, 'Benadryl', 6, 9, 'abc1', 'Syna Pharma', 'ml', '39.36', NULL, NULL, 'medicine_1721887958984.jpeg'),
-(10, 'Himalaya Koflet Cough Syrup 100ml', 6, 9, 'Composition', 'ZOXIL S Pvt Ltd', 'ml', '0', NULL, NULL, 'medicine_1721902495122.jpg');
+(10, 'Himalaya Koflet Cough Syrup 100ml', 6, 9, 'Composition', 'ZOXIL S Pvt Ltd', 'ml', '0', NULL, NULL, 'medicine_1721902495122.jpg'),
+(11, 'Cofsils', 6, 9, 'abc1', 'Syna Pharma', 'ml', '82', NULL, NULL, 'medicine_1721992095521.jpeg');
 
 -- --------------------------------------------------------
 
@@ -626,7 +628,7 @@ ALTER TABLE `composition`
 -- AUTO_INCREMENT for table `description`
 --
 ALTER TABLE `description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `doctor`
@@ -656,7 +658,7 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `medicine`
 --
 ALTER TABLE `medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `order_table`
